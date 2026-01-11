@@ -9,6 +9,7 @@ public class GameResultPopup : MonoBehaviour
     [Header("UI 组件引用")]
     public Transform windowContainer; 
     public TextMeshProUGUI titleText;
+    public TextMeshProUGUI scoreText; // 显示分数（胜利时）
     
     [Header("按钮引用")]
     public GameObject btnRetry;
@@ -53,12 +54,26 @@ public class GameResultPopup : MonoBehaviour
 
     public void ShowVictory()
     {
-        SetupWindow("Victory", true);
+        SetupWindow("Victory!", true);
+        
+        // 播放胜利特效（屏幕中央）
+        if (VFXManager.Instance != null)
+        {
+            Vector3 centerPos = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 10f));
+            VFXManager.Instance.PlayVictoryVFX(centerPos);
+        }
     }
 
     public void ShowGameOver()
     {
-        SetupWindow("Game Over", false);
+        SetupWindow("Failed", false);
+        
+        // 播放失败特效（可选）
+        if (VFXManager.Instance != null)
+        {
+            Vector3 centerPos = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 10f));
+            VFXManager.Instance.PlayGameOverVFX(centerPos);
+        }
     }
 
     // 延迟显示 GameOver（在自己身上运行协程，避免 DontDestroyOnLoad 对象的协程被中断）
@@ -71,7 +86,7 @@ public class GameResultPopup : MonoBehaviour
     private IEnumerator DelayedGameOverCoroutine()
     {
         yield return new WaitForSecondsRealtime(0.1f);
-        SetupWindow("Game Over", false);
+        SetupWindow("Failed", false);
     }
 
     // --- 内部逻辑 ---
@@ -99,6 +114,21 @@ public class GameResultPopup : MonoBehaviour
         // 设置标题
         if (titleText != null)
             titleText.text = title;
+
+        // 设置分数显示（仅在胜利时显示）
+        if (scoreText != null)
+        {
+            if (isVictory)
+            {
+                int finalScore = GameManager.Instance != null ? GameManager.Instance.currentScore : 0;
+                scoreText.text = "Score: " + finalScore.ToString();
+                scoreText.gameObject.SetActive(true);
+            }
+            else
+            {
+                scoreText.gameObject.SetActive(false); // 失败时不显示分数
+            }
+        }
 
         // 控制按钮显隐
         if (isVictory)
@@ -141,24 +171,26 @@ public class GameResultPopup : MonoBehaviour
 
     public void OnClickRetry()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+        // 重新开始游戏
+        if (GameManager.Instance != null)
+            GameManager.Instance.RestartGame();
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
     }
 
     public void OnClickReturnToMenu()
     {
-        // 如果是胜利状态（btnNext 显示），回到菜单时更新关卡进度
-        if (btnNext != null && btnNext.activeSelf)
-        {
-            if (GameManager.Instance != null)
-                GameManager.Instance.AdvanceLevelProgress();
-        }
-
-        SceneManager.LoadScene(menuSceneName);
+        // 返回主菜单
+        if (GameManager.Instance != null)
+            GameManager.Instance.BackToMenu();
+        else
+            SceneManager.LoadScene(menuSceneName);
     }
 
     public void OnClickNext()
     {
-        if (GameManager.Instance != null)
-            GameManager.Instance.LoadNextLevel(); 
+        // 贪吃蛇游戏中，"Next" 按钮可以重新开始
+        // 或者隐藏这个按钮（在胜利时不显示Next按钮）
+        OnClickRetry();
     }
 }

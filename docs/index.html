@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixelFlow - 技术文档</title>
+    <title>Poker Card Snake Game - 技术文档</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #f8fafc;
-            --bg-card: #ffffff;
-            --bg-code: #f1f5f9;
-            --border: #e2e8f0;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --accent: #6366f1;
-            --accent-light: #818cf8;
-            --accent-bg: #eef2ff;
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-code: #334155;
+            --border: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent: #8b5cf6;
+            --accent-light: #a78bfa;
+            --accent-bg: #2e1065;
             --success: #10b981;
-            --success-bg: #ecfdf5;
+            --success-bg: #064e3b;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
             --radius: 12px;
             --sidebar-width: 280px;
         }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: 'Noto Sans SC', 'Inter', sans-serif;
             background: var(--bg-main);
@@ -34,9 +36,9 @@
             line-height: 1.8;
             font-size: 15px;
         }
-        body.lang-en { font-family: 'Inter', sans-serif; }
-        body.lang-ja { font-family: 'Noto Sans JP', sans-serif; }
+        
         .layout { display: flex; min-height: 100vh; }
+        
         .sidebar {
             width: var(--sidebar-width);
             background: var(--bg-card);
@@ -47,761 +49,709 @@
             height: 100vh;
             overflow-y: auto;
             z-index: 100;
+            padding: 2rem 0;
         }
-        .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border); }
-        .logo { display: flex; align-items: center; gap: 12px; }
-        .logo-icon {
-            width: 42px; height: 42px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 18px; color: white;
+        
+        .logo {
+            padding: 0 2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
         }
-        .logo-text { font-size: 22px; font-weight: 700; }
-        .lang-switcher {
-            display: flex; gap: 4px; margin-top: 16px;
-            background: var(--bg-main); border-radius: 10px; padding: 4px;
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-bottom: 0.5rem;
         }
-        .lang-btn {
-            flex: 1; padding: 8px 12px; border: none;
-            background: transparent; color: var(--text-muted);
-            font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 6px;
+        
+        .logo p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
         }
-        .lang-btn:hover { color: var(--text-primary); background: var(--bg-card); }
-        .lang-btn.active { background: var(--accent); color: white; }
-        .sidebar-nav { padding: 16px 12px; }
-        .nav-section { margin-bottom: 24px; }
+        
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+        
         .nav-title {
-            font-size: 11px; font-weight: 600; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px;
+            padding: 0 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
         }
-        .nav-link {
-            display: block; padding: 10px 12px; color: var(--text-secondary);
-            text-decoration: none; font-size: 14px; font-weight: 500;
-            border-radius: 8px; margin-bottom: 2px;
+        
+        .nav-links {
+            list-style: none;
         }
-        .nav-link:hover { background: var(--bg-main); color: var(--text-primary); }
-        .nav-link.active { background: var(--accent-bg); color: var(--accent); }
-        .main { flex: 1; margin-left: var(--sidebar-width); }
-        .content { max-width: 1200px; margin: 0 auto; padding: 48px 64px; }
-        .hero {
-            text-align: center; padding: 60px 40px;
-            background: linear-gradient(135deg, var(--accent-bg), #faf5ff, #fef3c7);
-            border-radius: 24px; margin-bottom: 48px;
+        
+        .nav-links li a {
+            display: block;
+            padding: 0.5rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
         }
-        .hero h1 { font-size: 56px; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; }
-        .hero-subtitle { font-size: 18px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 24px; }
-        .badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        
+        .nav-links li a:hover {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent-light);
+            border-left-color: var(--accent);
+        }
+        
+        .nav-links li a.active {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-light);
+            border-left-color: var(--accent);
+            font-weight: 500;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 3rem 4rem;
+            max-width: 1200px;
+        }
+        
+        .header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+        
         .badge {
-            padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 20px; font-size: 13px; color: var(--text-secondary);
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--accent-bg);
+            color: var(--accent-light);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-top: 1rem;
         }
-        .section { margin-bottom: 48px; }
-        .section-header {
-            display: flex; align-items: center; gap: 16px;
-            margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border);
+        
+        .section {
+            margin-bottom: 3rem;
         }
-        .section-num {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            font-weight: 600; font-size: 15px; color: white;
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
         }
-        .section-title { font-size: 24px; font-weight: 600; }
+        
+        .subsection-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text-secondary);
+        }
+        
         .card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius); margin-bottom: 12px; box-shadow: var(--shadow-sm);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
         }
-        .card:hover { border-color: #cbd5e1; box-shadow: var(--shadow-md); }
-        .card-header {
-            padding: 18px 24px; display: flex; justify-content: space-between;
-            align-items: center; cursor: pointer;
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--accent-light);
         }
-        .card-header:hover { background: var(--bg-main); }
-        .card-title-group { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .card-title { font-weight: 600; font-size: 15px; }
-        .card-path {
-            font-family: 'JetBrains Mono', monospace; font-size: 12px;
-            color: var(--text-muted); background: var(--bg-code);
-            padding: 4px 10px; border-radius: 6px;
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
         }
-        .card-toggle {
-            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
-            background: var(--bg-main); border-radius: 6px; color: var(--text-muted); font-size: 12px;
+        
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all 0.3s;
         }
-        .card.open .card-toggle { transform: rotate(180deg); color: var(--accent); background: var(--accent-bg); }
-        .card-body { display: none; padding: 0 24px 24px; border-top: 1px solid var(--border); }
-        .card.open .card-body { display: block; padding-top: 20px; }
-        .tag {
-            display: inline-block; padding: 4px 10px; border-radius: 6px;
-            font-size: 11px; font-weight: 600; text-transform: uppercase;
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent);
         }
-        .tag-singleton { background: var(--success-bg); color: var(--success); }
-        .tag-component { background: #eff6ff; color: #3b82f6; }
-        .tag-ui { background: #fdf2f8; color: #ec4899; }
-        .tag-editor { background: #f5f3ff; color: #8b5cf6; }
-        .tag-data { background: #fffbeb; color: #d97706; }
-        .tag-new { background: #fef2f2; color: #dc2626; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
-        th {
-            text-align: left; padding: 12px 16px; background: var(--bg-main);
-            color: var(--text-muted); font-weight: 500; font-size: 12px;
-            text-transform: uppercase; border-bottom: 1px solid var(--border);
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
-        td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
-        td:first-child { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 13px; }
+        
+        .feature-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-light);
+        }
+        
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-code);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--accent-light);
+        }
+        
         pre {
-            background: var(--bg-code); border: 1px solid var(--border);
-            border-radius: 8px; padding: 20px; overflow-x: auto; margin: 16px 0;
-            font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.6;
-            white-space: pre;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
         }
-        .method-list { list-style: none; }
-        .method-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .method-item:last-child { border-bottom: none; }
-        .method-name { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 14px; font-weight: 500; }
-        .method-desc { color: var(--text-secondary); font-size: 13px; margin-top: 6px; }
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .subsection { font-size: 17px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-        .info-box { background: var(--accent-bg); border: 1px solid #c7d2fe; border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
-        .info-box h4 { color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-        .info-box p { color: var(--text-secondary); font-size: 14px; }
-        .info-box.warning { background: #fffbeb; border-color: #fcd34d; }
-        .info-box.warning h4 { color: #d97706; }
-        .footer { text-align: center; padding: 32px 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
-        .footer a { color: var(--accent); text-decoration: none; }
-        [data-lang] { display: none; }
-        [data-lang="zh"] { display: block; }
-        body.lang-en [data-lang] { display: none; }
-        body.lang-en [data-lang="en"] { display: block; }
-        body.lang-ja [data-lang] { display: none; }
-        body.lang-ja [data-lang="ja"] { display: block; }
-        @media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+        
+        ul, ol {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+        
+        a {
+            color: var(--accent-light);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .info {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--bg-code);
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .emoji {
+            font-style: normal;
+        }
+        
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
-            .main { margin-left: 0; }
-            .content { padding: 24px; }
-            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 2rem 1.5rem;
+            }
         }
-        @media (min-width: 1600px) { .content { max-width: 1400px; } }
-        @media (min-width: 1920px) { :root { --sidebar-width: 320px; } .content { max-width: 1600px; } }
     </style>
 </head>
 <body>
     <div class="layout">
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <div class="logo-icon">P</div>
-                    <span class="logo-text">PixelFlow</span>
-                </div>
-                <div class="lang-switcher">
-                    <button class="lang-btn active" onclick="setLang('zh')">中文</button>
-                    <button class="lang-btn" onclick="setLang('en')">EN</button>
-                    <button class="lang-btn" onclick="setLang('ja')">日本語</button>
-                </div>
+            <div class="logo">
+                <h1>🐍 Poker Snake</h1>
+                <p>技术文档</p>
             </div>
-            <nav class="sidebar-nav">
+            
+            <nav>
                 <div class="nav-section">
-                    <div class="nav-title" data-lang="zh">快速开始</div>
-                    <div class="nav-title" data-lang="en">Getting Started</div>
-                    <div class="nav-title" data-lang="ja">はじめに</div>
-                    <a href="#overview" class="nav-link active">Overview</a>
-                    <a href="#scenes" class="nav-link">Scenes</a>
-                    <a href="#hierarchy" class="nav-link">Hierarchy</a>
+                    <div class="nav-title">概览</div>
+                    <ul class="nav-links">
+                        <li><a href="#overview" class="active">游戏概述</a></li>
+                        <li><a href="#features">核心特性</a></li>
+                        <li><a href="#architecture">系统架构</a></li>
+                    </ul>
                 </div>
+                
                 <div class="nav-section">
-                    <div class="nav-title" data-lang="zh">脚本详解</div>
-                    <div class="nav-title" data-lang="en">Scripts</div>
-                    <div class="nav-title" data-lang="ja">スクリプト</div>
-                    <a href="#core" class="nav-link">Core Systems</a>
-                    <a href="#gameplay" class="nav-link">Gameplay</a>
-                    <a href="#ui" class="nav-link">UI</a>
-                    <a href="#data" class="nav-link">Data</a>
+                    <div class="nav-title">核心系统</div>
+                    <ul class="nav-links">
+                        <li><a href="#snake-system">贪吃蛇系统</a></li>
+                        <li><a href="#poker-system">扑克牌系统</a></li>
+                        <li><a href="#input-system">输入系统</a></li>
+                        <li><a href="#vfx-system">特效系统</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-title">技术细节</div>
+                    <ul class="nav-links">
+                        <li><a href="#algorithms">核心算法</a></li>
+                        <li><a href="#optimization">性能优化</a></li>
+                        <li><a href="#design-patterns">设计模式</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-title">开发指南</div>
+                    <ul class="nav-links">
+                        <li><a href="#setup">项目设置</a></li>
+                        <li><a href="#scripts">脚本文档</a></li>
+                        <li><a href="#troubleshooting">问题排查</a></li>
+                    </ul>
                 </div>
             </nav>
         </aside>
-        <main class="main">
-            <div class="content">
-                <!-- Hero -->
-                <section class="hero">
-                    <h1>PixelFlow</h1>
-                    <p class="hero-subtitle" data-lang="zh">一款2D益智射击游戏：彩色射手在传送带上巡逻，自动射击匹配颜色的方块</p>
-                    <p class="hero-subtitle" data-lang="en">A 2D puzzle shooter where colored shooters patrol a conveyor belt, firing at matching cells</p>
-                    <p class="hero-subtitle" data-lang="ja">コンベアベルトを巡回する色付きシューターが、一致するセルに自動発射する2Dパズルシューティング</p>
-                    <div class="badges">
-                        <span class="badge">Unity 2021.3+</span>
-                        <span class="badge">C# / MonoBehaviour</span>
-                        <span class="badge">MIT License</span>
+        
+        <main class="main-content">
+            <header class="header">
+                <h1>Poker Card Snake Game</h1>
+                <p>扑克牌驱动的贪吃蛇游戏 - 技术文档</p>
+                <div>
+                    <span class="badge">Unity 2021.3+</span>
+                    <span class="badge">C#</span>
+                    <span class="badge">2D Game</span>
+                </div>
+            </header>
+            
+            <section id="overview" class="section">
+                <h2 class="section-title">🎮 游戏概述</h2>
+                
+                <div class="card">
+                    <p>Poker Card Snake Game 是一款创新的贪吃蛇变体游戏，融合了扑克牌抽取机制和经典贪吃蛇玩法。玩家通过洗牌抽取扑克牌组合来动态生成地图元素，同时控制贪吃蛇吃球得分，在20秒内挑战高分！</p>
+                </div>
+                
+                <h3 class="subsection-title">核心玩法</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎴</div>
+                        <div class="feature-title">扑克牌系统</div>
+                        <div class="feature-desc">洗牌抽取6张牌，自动识别斗地主牌型，生成对应的地图元素</div>
                     </div>
-                </section>
-
-                <!-- Section 1: Overview -->
-                <section class="section" id="overview">
-                    <div class="section-header">
-                        <div class="section-num">1</div>
-                        <h2 class="section-title" data-lang="zh">核心玩法</h2>
-                        <h2 class="section-title" data-lang="en">Core Mechanics</h2>
-                        <h2 class="section-title" data-lang="ja">コアメカニクス</h2>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🐍</div>
+                        <div class="feature-title">贪吃蛇系统</div>
+                        <div class="feature-desc">20×35大型网格，8方向移动，拖拽距离控制速度，四方向穿越</div>
                     </div>
-                    <div class="card open">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <span class="card-title" data-lang="zh">游戏流程</span>
-                            <span class="card-title" data-lang="en">Game Flow</span>
-                            <span class="card-title" data-lang="ja">ゲームフロー</span>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-                            <div data-lang="zh">
-                                <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 2.2;">
-                                    <li><strong>选择射手</strong> - 点击备战台上的射手，移动到准备队列（最多5个槽位）</li>
-                                    <li><strong>部署传送带</strong> - 点击队列中的射手，开始传送带巡逻</li>
-                                    <li><strong>自动射击</strong> - 射手沿传送带移动，自动射击颜色匹配的方块</li>
-                                    <li><strong>颜色阻挡</strong> - 异色方块会阻挡射线，不会穿透击中后面的同色方块</li>
-                                    <li><strong>胜利条件</strong> - 清除网格中所有方块</li>
-                                    <li><strong>失败条件</strong> - 射手返回时准备队列已满</li>
-                                </ul>
-                                <div class="info-box">
-                                    <h4>绝地反击机制 (Last Stand)</h4>
-                                    <p>当备战台和准备队列都为空时，当前射手触发"绝地反击"模式，获得<strong>2倍速度加成</strong>，自动重新进入传送带直到弹药耗尽。</p>
-                                </div>
-                            </div>
-                            <div data-lang="en">
-                                <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 2.2;">
-                                    <li><strong>Select Shooters</strong> - Click shooters from table to ready queue (5 slots max)</li>
-                                    <li><strong>Deploy to Belt</strong> - Click queued shooter to start belt patrol</li>
-                                    <li><strong>Auto-Fire</strong> - Shooters auto-fire at color-matching cells</li>
-                                    <li><strong>Color Blocking</strong> - Different-color cells block shots, no penetration</li>
-                                    <li><strong>Win</strong> - Clear all cells from grid</li>
-                                    <li><strong>Lose</strong> - Ready queue full when shooter returns</li>
-                                </ul>
-                                <div class="info-box">
-                                    <h4>Last Stand Mechanic</h4>
-                                    <p>When table and queue are empty, shooter triggers "Last Stand" with <strong>2x speed</strong>, auto re-enters belt until ammo depletes.</p>
-                                </div>
-                            </div>
-                            <div data-lang="ja">
-                                <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 2.2;">
-                                    <li><strong>シューター選択</strong> - テーブルから待機キューに移動（最大5スロット）</li>
-                                    <li><strong>ベルトへ配置</strong> - キュー内のシューターをクリックしてベルトパトロール開始</li>
-                                    <li><strong>自動発射</strong> - 同色セルに自動発射</li>
-                                    <li><strong>色ブロッキング</strong> - 異色セルはショットをブロック</li>
-                                    <li><strong>勝利</strong> - すべてのセルをクリア</li>
-                                    <li><strong>敗北</strong> - シューターが戻ったときキューが満杯</li>
-                                </ul>
-                                <div class="info-box">
-                                    <h4>ラストスタンド</h4>
-                                    <p>テーブルとキューが空のとき<strong>2倍速</strong>でベルトに自動再突入。</p>
-                                </div>
-                            </div>
-                        </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <div class="feature-title">20秒挑战</div>
+                        <div class="feature-desc">时间到游戏胜利，撞到障碍或自己即刻失败，考验反应和策略</div>
                     </div>
-                </section>
-
-                <!-- Section 2: Scenes -->
-                <section class="section" id="scenes">
-                    <div class="section-header">
-                        <div class="section-num">2</div>
-                        <h2 class="section-title" data-lang="zh">场景结构</h2>
-                        <h2 class="section-title" data-lang="en">Scene Structure</h2>
-                        <h2 class="section-title" data-lang="ja">シーン構造</h2>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <div class="feature-title">特效系统</div>
+                        <div class="feature-desc">粒子特效、弹性动画、蛇头拖尾，速度越快特效越炫</div>
                     </div>
-                    <div class="grid-3">
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <span class="card-title">SplashScene</span>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p data-lang="zh" style="color: var(--text-secondary);">启动画面，展示Logo后淡入淡出过渡到MenuScene。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">Splash screen with fade transition to MenuScene.</p>
-                                <p data-lang="ja" style="color: var(--text-secondary);">ロゴ表示後MenuSceneへフェードトランジション。</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <span class="card-title">MenuScene</span>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p data-lang="zh" style="color: var(--text-secondary);">主菜单，初始化GameManager单例(DontDestroyOnLoad)。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">Main menu. Initializes GameManager singleton.</p>
-                                <p data-lang="ja" style="color: var(--text-secondary);">メインメニュー。GameManagerシングルトンを初期化。</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <span class="card-title">GameScene</span>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p data-lang="zh" style="color: var(--text-secondary);">主游戏场景：20x20网格、射手系统、传送带、结果弹窗。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">Main gameplay: 20x20 grid, shooters, belt, result popup.</p>
-                                <p data-lang="ja" style="color: var(--text-secondary);">メインゲームプレイ：20x20グリッド、シューター、ベルト。</p>
-                            </div>
-                        </div>
+                </div>
+            </section>
+            
+            <section id="features" class="section">
+                <h2 class="section-title">🌟 核心特性</h2>
+                
+                <div class="card">
+                    <div class="card-title">1. 动态速度控制</div>
+                    <p>拖拽距离越长，蛇移动越快（0.5x - 2.0x），松开恢复正常速度。</p>
+                    <pre><code>// 线性插值计算速度倍数
+float speedMultiplier = Mathf.Lerp(
+    minSpeedMultiplier,  // 0.5x
+    maxSpeedMultiplier,  // 2.0x
+    dragDistance / maxDragDistance
+);</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">2. 2x2大型得分球</div>
+                    <p>得分球大小为2x2，占据4个格子，碰撞面积增加4倍，蛇头碰到任意一格都算吃到。</p>
+                    <ul>
+                        <li>视觉大小：<code>cellSize * 2f * 0.9f</code></li>
+                        <li>占用格子：4个（2x2区域）</li>
+                        <li>碰撞判定：蛇头碰到4个格子中任意一个即可</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">3. 扑克牌组合识别</div>
+                    <p>支持斗地主全部牌型：单张、对子、三张、三带一、三带二、顺子、连对、飞机、四带二。</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>牌型</th>
+                                <th>英文名</th>
+                                <th>生成效果</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>对子/三张</td>
+                                <td>PAIR/THREE</td>
+                                <td>20%障碍物 或 80%得分球</td>
+                            </tr>
+                            <tr>
+                                <td>三带一/三带二</td>
+                                <td>THREE WITH ONE/PAIR</td>
+                                <td>10个得分球</td>
+                            </tr>
+                            <tr>
+                                <td>顺子/连对</td>
+                                <td>STRAIGHT/DOUBLE STRAIGHT</td>
+                                <td>20个得分球</td>
+                            </tr>
+                            <tr>
+                                <td>飞机/四带二</td>
+                                <td>PLANE/FOUR WITH TWO</td>
+                                <td>40个得分球</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">4. 粒子特效系统</div>
+                    <p>使用 Layer Lab 粒子素材，包含5大类特效：</p>
+                    <ul>
+                        <li><strong>吃球特效</strong> ⭐ - Particle_Stars_00（星星爆炸）</li>
+                        <li><strong>洗牌特效</strong> 🎴 - Particle_Card_00（卡牌飞舞）</li>
+                        <li><strong>胜利特效</strong> 🎆 - Particle_Firework_00（烟花庆祝）</li>
+                        <li><strong>失败特效</strong> 💨 - Particle_Smoke_00（烟雾消散）</li>
+                        <li><strong>蛇头拖尾</strong> ✨ - Particle_Trail_00（持续跟随，速度越快粒子越多）</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="architecture" class="section">
+                <h2 class="section-title">🏗️ 系统架构</h2>
+                
+                <div class="card">
+                    <div class="card-title">项目结构</div>
+                    <pre><code>U3D_Shuffle_Snake/
+├── Assets/Scripts/
+│   ├── GameManager.cs              # 游戏状态、计时器、分数
+│   ├── GameScene/
+│   │   ├── SnakeGridManager.cs    # 20×35网格、碰撞检测
+│   │   ├── SnakeController.cs     # 蛇移动、增长、碰撞
+│   │   ├── TouchInputManager.cs   # 拖拽输入、速度控制
+│   │   ├── PokerManager.cs        # 扑克牌管理、洗牌
+│   │   ├── PokerComboDetector.cs  # 牌型识别
+│   │   ├── VFXManager.cs          # 特效管理、对象池
+│   │   └── CellController.cs      # 格子控制器
+│   └── UIScripts/
+│       ├── GameResultPopup.cs     # 胜利/失败弹窗
+│       ├── TimerDisplay.cs        # 倒计时显示
+│       └── ScoreDisplay.cs        # 分数显示
+└── Resources/Poke/                # 扑克牌资源</code></pre>
+                </div>
+                
+                <h3 class="subsection-title">设计模式</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-title">单例模式</div>
+                        <div class="feature-desc">GameManager, VFXManager, SnakeController 等全局管理器使用单例模式，确保全局唯一访问。</div>
                     </div>
-                </section>
-
-                <!-- Section 3: Hierarchy -->
-                <section class="section" id="hierarchy">
-                    <div class="section-header">
-                        <div class="section-num">3</div>
-                        <h2 class="section-title" data-lang="zh">层级结构</h2>
-                        <h2 class="section-title" data-lang="en">Hierarchy</h2>
-                        <h2 class="section-title" data-lang="ja">ヒエラルキー</h2>
+                    
+                    <div class="feature-card">
+                        <div class="feature-title">组件化设计</div>
+                        <div class="feature-desc">高内聚低耦合的脚本架构，每个脚本负责单一职责，便于维护和扩展。</div>
                     </div>
-                    <div class="card open">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <span class="card-title" data-lang="zh">GameScene 层级树</span>
-                            <span class="card-title" data-lang="en">GameScene Hierarchy Tree</span>
-                            <span class="card-title" data-lang="ja">GameScene ヒエラルキーツリー</span>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-<pre>GameScene
-|
-|-- Main Camera
-|
-|-- GameManager                        <span style="color:var(--text-muted)"># Singleton, DontDestroyOnLoad</span>
-|
-|-- GameRoot
-|   |
-|   |-- GridManager                    <span style="color:var(--text-muted)"># 20x20 网格管理器</span>
-|   |   |-- Pixel_Cell (x400)          <span style="color:var(--text-muted)"># 方块实例 (动态生成)</span>
-|   |
-|   |-- BeltPathHolder                 <span style="color:var(--text-muted)"># 传送带路径 (4个角点)</span>
-|   |   |-- Waypoint_0                 <span style="color:var(--text-muted)"># 左下角</span>
-|   |   |-- Waypoint_1                 <span style="color:var(--text-muted)"># 右下角</span>
-|   |   |-- Waypoint_2                 <span style="color:var(--text-muted)"># 右上角</span>
-|   |   |-- Waypoint_3                 <span style="color:var(--text-muted)"># 左上角</span>
-|   |
-|   |-- ReadyQueueManager              <span style="color:var(--text-muted)"># 准备队列 (5槽位)</span>
-|   |   |-- Slot_0 ~ Slot_4
-|   |
-|   |-- ShooterTableManager            <span style="color:var(--text-muted)"># 备战台 (5列x6行)</span>
-|       |-- Pig_Shooter (动态生成)
-|
-|-- Canvas
-    |-- Top                            <span style="color:var(--text-muted)"># 顶部UI (关卡显示)</span>
-    |-- Popup_GameResult               <span style="color:var(--text-muted)"># 结果弹窗</span>
-        |-- WindowContainer
-        |-- BtnRetry / BtnMenu / BtnNext</pre>
-                        </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-title">对象池模式</div>
+                        <div class="feature-desc">VFX特效使用对象池复用，减少实例化开销和GC压力。</div>
                     </div>
-                </section>
-
-                <!-- Section 4: Core Scripts -->
-                <section class="section" id="core">
-                    <div class="section-header">
-                        <div class="section-num">4</div>
-                        <h2 class="section-title" data-lang="zh">核心系统</h2>
-                        <h2 class="section-title" data-lang="en">Core Systems</h2>
-                        <h2 class="section-title" data-lang="ja">コアシステム</h2>
+                    
+                    <div class="feature-card">
+                        <div class="feature-title">事件驱动</div>
+                        <div class="feature-desc">使用协程驱动游戏流程，清晰的事件链和时序控制。</div>
                     </div>
-
-                    <!-- GameManager -->
-                    <div class="card">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <div class="card-title-group">
-                                <span class="tag tag-singleton">Singleton</span>
-                                <span class="card-title">GameManager</span>
-                                <span class="card-path">Scripts/GameManager.cs</span>
-                            </div>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-                            <p data-lang="zh" style="color: var(--text-secondary); margin-bottom: 16px;">全局游戏管理器 (DontDestroyOnLoad)。负责关卡状态、场景切换、JSON数据加载和游戏结束触发。</p>
-                            <p data-lang="en" style="color: var(--text-secondary); margin-bottom: 16px;">Global game manager (DontDestroyOnLoad). Handles level state, scene transitions, JSON loading, game over.</p>
-                            <p data-lang="ja" style="color: var(--text-secondary); margin-bottom: 16px;">グローバルゲームマネージャー (DontDestroyOnLoad)。</p>
-                            <ul class="method-list">
-                                <li class="method-item"><span class="method-name">StartLevel(string levelName)</span><div class="method-desc">设置 currentLevelName 并加载 GameScene</div></li>
-                                <li class="method-item"><span class="method-name">LoadNextLevel()</span><div class="method-desc">进入下一关，不存在则返回菜单</div></li>
-                                <li class="method-item"><span class="method-name">GameOver(bool isWin)</span><div class="method-desc">触发胜利(true)/失败(false)弹窗</div></li>
-                                <li class="method-item"><span class="method-name">LoadGridData() : LevelGridData</span><div class="method-desc">加载 Level_X_grid.json</div></li>
-                                <li class="method-item"><span class="method-name">LoadTableData() : ShooterTableData</span><div class="method-desc">加载 Level_X_table.json</div></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- GridManager -->
-                    <div class="card">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <div class="card-title-group">
-                                <span class="tag tag-singleton">Singleton</span>
-                                <span class="tag tag-new">Updated</span>
-                                <span class="card-title">GridManager</span>
-                                <span class="card-path">Scripts/GameScene/GridManager.cs</span>
-                            </div>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-                            <p data-lang="zh" style="color: var(--text-secondary); margin-bottom: 16px;">网格系统核心，负责20x20方块的生成、<strong>智能穿透查找 + 颜色阻挡</strong>、胜利检测。采用 O(1) 二维数组存储。</p>
-                            <p data-lang="en" style="color: var(--text-secondary); margin-bottom: 16px;">Core grid system. 20x20 cell generation, <strong>smart lookup with color blocking</strong>, win detection. O(1) 2D array storage.</p>
-                            <p data-lang="ja" style="color: var(--text-secondary); margin-bottom: 16px;">20x20セルグリッドの生成、<strong>色ブロッキング付きスマート検索</strong>、勝利検出。</p>
-                            
-                            <h4 class="subsection" data-lang="zh">核心算法: GetTargetCellSmart</h4>
-                            <h4 class="subsection" data-lang="en">Core Algorithm: GetTargetCellSmart</h4>
-                            <h4 class="subsection" data-lang="ja">コアアルゴリズム: GetTargetCellSmart</h4>
-                            <div class="info-box warning">
-                                <h4 data-lang="zh">新增: 颜色阻挡判定</h4>
-                                <h4 data-lang="en">NEW: Color Blocking</h4>
-                                <h4 data-lang="ja">NEW: 色ブロッキング</h4>
-                                <p data-lang="zh">函数签名更新: <code>GetTargetCellSmart(Vector3 pos, string shooterColor)</code><br>扫描到的方块会根据颜色判定：同色=目标，异色=阻挡(返回null)，isPendingDeath=穿透</p>
-                                <p data-lang="en">Signature updated: <code>GetTargetCellSmart(Vector3 pos, string shooterColor)</code><br>Scanned cells: same color=target, different color=blocked(null), isPendingDeath=penetrate</p>
-                                <p data-lang="ja">シグネチャ更新: <code>GetTargetCellSmart(Vector3 pos, string shooterColor)</code></p>
-                            </div>
-<pre>// 查找逻辑 (CheckCell 委托)
-if (c == null || c.isDestroyed) return 0;  // 空气，继续
-if (c.isPendingDeath) return 0;            // 已被预定，穿透
-if (c.colorID != shooterColor) return 2;   // 异色，阻挡！
-return 1;                                   // 同色，命中！</pre>
-                            <ul class="method-list">
-                                <li class="method-item">
-                                    <span class="method-name">GetTargetCellSmart(Vector3 pos, string color) : CellController</span>
-                                    <div class="method-desc" data-lang="zh">智能分区查找 + 颜色阻挡。根据位置判断区域(底/右/顶/左)向内扫描</div>
-                                    <div class="method-desc" data-lang="en">Smart zone lookup + color blocking. Scans inward based on position zone</div>
-                                </li>
-                                <li class="method-item">
-                                    <span class="method-name">GetSimulatedPosition(int beltIndex) : Vector3</span>
-                                    <div class="method-desc" data-lang="zh">传送带步数(0-79)转世界坐标。用于 Ground Truth 预计算</div>
-                                    <div class="method-desc" data-lang="en">Belt step index (0-79) to world position. For Ground Truth pre-calculation</div>
-                                </li>
-                                <li class="method-item">
-                                    <span class="method-name">OnCellDestroyed()</span>
-                                    <div class="method-desc">方块销毁回调，activeCellCount--。归零触发胜利</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 5: Gameplay Scripts -->
-                <section class="section" id="gameplay">
-                    <div class="section-header">
-                        <div class="section-num">5</div>
-                        <h2 class="section-title" data-lang="zh">游戏逻辑</h2>
-                        <h2 class="section-title" data-lang="en">Gameplay</h2>
-                        <h2 class="section-title" data-lang="ja">ゲームプレイ</h2>
-                    </div>
-
-                    <!-- PigController -->
-                    <div class="card">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <div class="card-title-group">
-                                <span class="tag tag-component">Component</span>
-                                <span class="tag tag-new">Updated</span>
-                                <span class="card-title">PigController</span>
-                                <span class="card-path">Scripts/GameScene/PigController.cs (721行)</span>
-                            </div>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-                            <p data-lang="zh" style="color: var(--text-secondary); margin-bottom: 16px;"><strong>核心射手控制器</strong>：状态机、预计算射击、传送带巡逻、绝地反击、Ground Truth 发射。</p>
-                            <p data-lang="en" style="color: var(--text-secondary); margin-bottom: 16px;"><strong>Core shooter controller</strong>: State machine, pre-calculated shots, belt patrol, last stand, Ground Truth firing.</p>
-                            <p data-lang="ja" style="color: var(--text-secondary); margin-bottom: 16px;"><strong>コアシューターコントローラー</strong>：状態マシン、事前計算ショット、ベルトパトロール。</p>
-                            
-                            <h4 class="subsection" data-lang="zh">状态机 (PigState)</h4>
-                            <h4 class="subsection" data-lang="en">State Machine (PigState)</h4>
-                            <h4 class="subsection" data-lang="ja">状態マシン</h4>
-<pre>InTable -> InQueue -> OnBelt -> Returning -> InQueue (循环)
-              |          |
-              |          v (Table & Queue 都空)
-              |     AutoRejoinBelt (绝地反击, 2x速度)
-              |
-              +-> GoToBelt() -> PreCalculatePath() -> RunBeltSequence()</pre>
-                            
-                            <h4 class="subsection" data-lang="zh">Ground Truth 射击系统</h4>
-                            <h4 class="subsection" data-lang="en">Ground Truth Firing System</h4>
-                            <h4 class="subsection" data-lang="ja">Ground Truth 射撃システム</h4>
-                            <div class="info-box warning">
-                                <h4 data-lang="zh">帧率无关射击</h4>
-                                <h4 data-lang="en">Frame-Rate Independent Firing</h4>
-                                <h4 data-lang="ja">フレームレート非依存射撃</h4>
-                                <p data-lang="zh">由于帧率波动，射手的实际位置可能与预计算位置有偏差。<br>解决方案: <strong>PerformVisualFire(target, fireOrigin)</strong> 使用预计算的理论位置(Ground Truth)作为发射点。</p>
-                                <p data-lang="en">Due to frame rate fluctuation, shooter's actual position may differ from pre-calculated position.<br>Solution: <strong>PerformVisualFire(target, fireOrigin)</strong> uses pre-calculated theoretical position (Ground Truth) as fire origin.</p>
-                                <p data-lang="ja">フレームレート変動により実際の位置が事前計算位置と異なる場合があります。<br>解決策: Ground Truth 位置を発射点として使用。</p>
-                            </div>
-<pre>// RunBeltSequence 中的射击逻辑
-while (shotSchedule.Count > 0 && shotSchedule.Peek().beltStepIndex <= currentStep)
+                </div>
+            </section>
+            
+            <section id="algorithms" class="section">
+                <h2 class="section-title">💡 核心算法</h2>
+                
+                <div class="card">
+                    <div class="card-title">1. 屏幕穿越算法</div>
+                    <p>支持四方向边界穿越（左右、上下互通）：</p>
+                    <pre><code>public Vector2Int WrapGridPosition(Vector2Int gridPos)
 {
-    ShotScheduleItem nextShot = shotSchedule.Dequeue();
-    
-    // 获取预计算时的理论发射位置 (Ground Truth)
-    Vector3 idealFirePos = GridManager.Instance.GetSimulatedPosition(nextShot.beltStepIndex);
-    idealFirePos.z = transform.position.z;
-    
-    // 从理论位置开火，确保子弹轨迹正确
-    PerformVisualFire(nextShot.target, idealFirePos);
-}</pre>
-                            <ul class="method-list">
-                                <li class="method-item">
-                                    <span class="method-name">PreCalculatePath()</span>
-                                    <div class="method-desc" data-lang="zh">预计算80步射击路径，生成 shotSchedule 队列。调用 GetTargetCellSmart(pos, colorID)</div>
-                                    <div class="method-desc" data-lang="en">Pre-calculates 80-step shot path, generates shotSchedule queue. Calls GetTargetCellSmart(pos, colorID)</div>
-                                </li>
-                                <li class="method-item">
-                                    <span class="method-name">RunBeltSequence(List&lt;Transform&gt;)</span>
-                                    <div class="method-desc">主巡逻协程：飞向起点 -> 遍历4边 -> Ground Truth射击 -> CheckEndGameAndReturn</div>
-                                </li>
-                                <li class="method-item">
-                                    <span class="method-name">PerformVisualFire(target, fireOrigin)</span>
-                                    <div class="method-desc" data-lang="zh"><strong>[更新]</strong> 接受 fireOrigin 参数，从 Ground Truth 位置发射子弹</div>
-                                    <div class="method-desc" data-lang="en"><strong>[Updated]</strong> Accepts fireOrigin param, fires bullet from Ground Truth position</div>
-                                </li>
-                                <li class="method-item">
-                                    <span class="method-name">AutoRejoinBelt()</span>
-                                    <div class="method-desc">绝地反击：isBoosted=true(2x速度) -> 重新 PreCalculatePath -> RunBeltSequence</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+    int newX = (gridPos.x + gridWidth) % gridWidth;
+    int newY = (gridPos.y + gridHeight) % gridHeight;
+    return new Vector2Int(newX, newY);
+}</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">2. 2x2碰撞优化</div>
+                    <p>得分球占据4个格子，蛇头碰到任意一格都算吃到：</p>
+                    <pre><code>// 注册4个格子都被占用
+for (int x = 0; x < 2; x++)
+    for (int y = 0; y < 2; y++)
+        RegisterCell(bottomLeft + new Vector2Int(x, y), 
+                    CellType.ScoreBall, ball);
 
-                    <!-- BulletController -->
-                    <div class="card">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <div class="card-title-group">
-                                <span class="tag tag-component">Component</span>
-                                <span class="tag tag-new">Updated</span>
-                                <span class="card-title">BulletController</span>
-                                <span class="card-path">Scripts/GameScene/BulletController.cs</span>
-                            </div>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-                            <p data-lang="zh" style="color: var(--text-secondary); margin-bottom: 16px;">子弹飞行控制器。<strong>Ground Truth 位置缓存</strong> + <strong>sqrMagnitude 高性能碰撞</strong>。</p>
-                            <p data-lang="en" style="color: var(--text-secondary); margin-bottom: 16px;">Bullet flight controller. <strong>Ground Truth position caching</strong> + <strong>sqrMagnitude high-performance collision</strong>.</p>
-                            <p data-lang="ja" style="color: var(--text-secondary); margin-bottom: 16px;">弾丸飛行コントローラー。Ground Truth 位置キャッシュ + sqrMagnitude 高性能衝突。</p>
-                            <div class="info-box">
-                                <h4 data-lang="zh">优化点</h4>
-                                <h4 data-lang="en">Optimizations</h4>
-                                <h4 data-lang="ja">最適化</h4>
-                                <p data-lang="zh">1. 发射时立即缓存 targetPos，即使目标被提前销毁也能飞到正确位置<br>2. 使用 sqrMagnitude 替代 Distance (避免开方运算)，提升性能</p>
-                                <p data-lang="en">1. Caches targetPos immediately on fire, bullet reaches correct position even if target destroyed<br>2. Uses sqrMagnitude instead of Distance (avoids sqrt), improves performance</p>
-                                <p data-lang="ja">1. 発射時にtargetPosを即座にキャッシュ<br>2. Distance の代わりに sqrMagnitude を使用（sqrt回避）</p>
-                            </div>
-<pre>// Fire 时缓存目标位置 (Ground Truth)
-targetPos = target.transform.position;
+// 清除时找到所有指向同一对象的格子
+foreach (var kvp in cellObjects)
+{
+    if (kvp.Value == ballObj)
+        cellsToClear.Add(kvp.Key);
+}</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">3. HashSet碰撞检测</div>
+                    <p>使用 HashSet 存储占用格子，O(1)复杂度查询：</p>
+                    <pre><code>private HashSet<Vector2Int> occupiedCells;
+private Dictionary<Vector2Int, CellType> cellTypes;
+private Dictionary<Vector2Int, GameObject> cellObjects;
 
-// Update 中使用 sqrMagnitude 判定到达
-if ((transform.position - targetPos).sqrMagnitude < 0.001f)
-    Hit();</pre>
-                        </div>
-                    </div>
-
-                    <div class="grid-2">
-                        <!-- ReadyQueueManager -->
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <div class="card-title-group">
-                                    <span class="tag tag-singleton">Singleton</span>
-                                    <span class="card-title">ReadyQueueManager</span>
-                                </div>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-path" style="margin-bottom: 12px;">Scripts/GameScene/ReadyQueueManager.cs</p>
-                                <p data-lang="zh" style="color: var(--text-secondary);">5槽位准备队列。<strong>Shift Left 算法</strong>自动左移补位。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">5-slot ready queue. <strong>Shift Left algorithm</strong> for auto-filling.</p>
-                                <ul class="method-list" style="margin-top:12px">
-                                    <li class="method-item"><span class="method-name">RegisterPig(int, PigController)</span></li>
-                                    <li class="method-item"><span class="method-name">UnregisterPig(PigController)</span><div class="method-desc">注销 + Shift Left</div></li>
-                                    <li class="method-item"><span class="method-name">IsFull() : bool</span><div class="method-desc">失败条件检测</div></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- ShooterTableManager -->
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <div class="card-title-group">
-                                    <span class="tag tag-singleton">Singleton</span>
-                                    <span class="card-title">ShooterTableManager</span>
-                                </div>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-path" style="margin-bottom: 12px;">Scripts/GameScene/ShooterTableManager.cs</p>
-                                <p data-lang="zh" style="color: var(--text-secondary);">5列x6行备战台。<strong>List&lt;List&gt;</strong> 实现堆栈式顶上。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">5x6 shooter table. <strong>List&lt;List&gt;</strong> for stack-like auto-rise.</p>
-                                <ul class="method-list" style="margin-top:12px">
-                                    <li class="method-item"><span class="method-name">OnPigClicked(PigController)</span></li>
-                                    <li class="method-item"><span class="method-name">IsTableEmpty() : bool</span><div class="method-desc">绝地反击条件</div></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- CellController -->
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <div class="card-title-group">
-                                    <span class="tag tag-component">Component</span>
-                                    <span class="card-title">CellController</span>
-                                </div>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-path" style="margin-bottom: 12px;">Scripts/GameScene/CellController.cs</p>
-                                <p data-lang="zh" style="color: var(--text-secondary);">单个方块控制器。<strong>isPendingDeath</strong> 占位标记用于预计算穿透。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">Cell controller. <strong>isPendingDeath</strong> flag for pre-calc penetration.</p>
-                                <table style="margin-top:12px">
-                                    <tr><td>colorID</td><td>颜色ID (red/blue/green/yellow)</td></tr>
-                                    <tr><td>isDestroyed</td><td>是否已物理销毁</td></tr>
-                                    <tr><td>isPendingDeath</td><td>是否已被预计算"预定"</td></tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- UIBillboard -->
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <div class="card-title-group">
-                                    <span class="tag tag-component">Component</span>
-                                    <span class="card-title">UIBillboard</span>
-                                </div>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-path" style="margin-bottom: 12px;">Scripts/GameScene/UIBillboard.cs</p>
-                                <p data-lang="zh" style="color: var(--text-secondary);">UI看板效果，让3D世界中的UI元素（如弹药数）始终面向摄像机。在 LateUpdate 中同步摄像机旋转。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">Billboard effect for 3D UI elements (e.g., ammo text). Syncs camera rotation in LateUpdate.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 6: UI Scripts -->
-                <section class="section" id="ui">
-                    <div class="section-header">
-                        <div class="section-num">6</div>
-                        <h2 class="section-title" data-lang="zh">UI 组件</h2>
-                        <h2 class="section-title" data-lang="en">UI Components</h2>
-                        <h2 class="section-title" data-lang="ja">UIコンポーネント</h2>
-                    </div>
-                    <div class="grid-2">
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <div class="card-title-group">
-                                    <span class="tag tag-ui">UI</span>
-                                    <span class="card-title">GameResultPopup</span>
-                                </div>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-path" style="margin-bottom: 12px;">Scripts/UIScripts/GameResultPopup.cs</p>
-                                <p data-lang="zh" style="color: var(--text-secondary);">胜利/失败弹窗。AnimationCurve 弹性动画 + Time.unscaledDeltaTime。</p>
-                                <p data-lang="en" style="color: var(--text-secondary);">Victory/GameOver popup. AnimationCurve pop animation + Time.unscaledDeltaTime.</p>
-                                <ul class="method-list" style="margin-top:12px">
-                                    <li class="method-item"><span class="method-name">ShowVictory()</span></li>
-                                    <li class="method-item"><span class="method-name">ShowGameOverDelayed()</span><div class="method-desc">延迟0.1s显示，避免协程冲突</div></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" onclick="toggleCard(this)">
-                                <div class="card-title-group">
-                                    <span class="tag tag-ui">UI</span>
-                                    <span class="card-title">BeltWalker / BeltPathHolder</span>
-                                </div>
-                                <div class="card-toggle">&#9660;</div>
-                            </div>
-                            <div class="card-body">
-                                <p data-lang="zh" style="color: var(--text-secondary);"><strong>BeltWalker</strong>: 传送带行走组件，支持 SetDoubleSpeed() 2倍速<br><strong>BeltPathHolder</strong>: 4角点路径数据容器 (Inspector配置)</p>
-                                <p data-lang="en" style="color: var(--text-secondary);"><strong>BeltWalker</strong>: Belt walking, supports SetDoubleSpeed() 2x<br><strong>BeltPathHolder</strong>: 4-corner waypoint container (Inspector config)</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 7: Data -->
-                <section class="section" id="data">
-                    <div class="section-header">
-                        <div class="section-num">7</div>
-                        <h2 class="section-title" data-lang="zh">数据结构与工具</h2>
-                        <h2 class="section-title" data-lang="en">Data Structures & Tools</h2>
-                        <h2 class="section-title" data-lang="ja">データ構造とツール</h2>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <div class="card-title-group">
-                                <span class="tag tag-data">Data</span>
-                                <span class="card-title" data-lang="zh">JSON 数据结构</span>
-                                <span class="card-title" data-lang="en">JSON Data Structures</span>
-                                <span class="card-title" data-lang="ja">JSONデータ構造</span>
-                            </div>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="grid-2">
-                                <div>
-                                    <h4 style="margin-bottom:8px">Level_X_grid.json</h4>
-<pre>{
-  "cells": [
-    {"x": 0, "y": 0, "color": "red"},
-    {"x": 0, "y": 1, "color": "blue"},
-    // 共400个方块 (20x20)
-  ]
-}</pre>
-                                </div>
-                                <div>
-                                    <h4 style="margin-bottom:8px">Level_X_table.json</h4>
-<pre>{
-  "columns": [
-    {"shooters": [
-      {"color": "red", "ammo": 25},
-      {"color": "blue", "ammo": 30}
-    ]},
-    // 共5列
-  ]
-}</pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header" onclick="toggleCard(this)">
-                            <div class="card-title-group">
-                                <span class="tag tag-editor">Editor</span>
-                                <span class="card-title">LevelDataGenerator</span>
-                            </div>
-                            <div class="card-toggle">&#9660;</div>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-path" style="margin-bottom: 12px;">Scripts/Level/LevelDataGenerator.cs</p>
-                            <p data-lang="zh" style="color: var(--text-secondary); margin-bottom: 16px;">编辑器关卡生成工具。右键组件 → <strong>[ContextMenu] Generate All 10 Levels</strong>。自动保证射手弹药 = 方块数量。</p>
-                            <p data-lang="en" style="color: var(--text-secondary); margin-bottom: 16px;">Editor level generation. Right-click → <strong>[ContextMenu] Generate All 10 Levels</strong>. Auto-balances ammo = cell counts.</p>
-                            <table>
-                                <tr><th>Level</th><th>Pattern</th><th>Level</th><th>Pattern</th></tr>
-                                <tr><td>1</td><td>Border + X diagonal</td><td>6</td><td>Circles</td></tr>
-                                <tr><td>2</td><td>Concentric squares</td><td>7</td><td>Diagonal stripes</td></tr>
-                                <tr><td>3</td><td>Checkerboard</td><td>8</td><td>Quadrants</td></tr>
-                                <tr><td>4</td><td>Stripes</td><td>9</td><td>Radial</td></tr>
-                                <tr><td>5</td><td>Spiral</td><td>10</td><td>Maze</td></tr>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <footer class="footer">
-                <p data-lang="zh">PixelFlow 技术文档 | <a href="https://github.com/NewbieAudioKid/PixU3D_bottomup">GitHub</a></p>
-                <p data-lang="en">PixelFlow Documentation | <a href="https://github.com/NewbieAudioKid/PixU3D_bottomup">GitHub</a></p>
-                <p data-lang="ja">PixelFlow ドキュメント | <a href="https://github.com/NewbieAudioKid/PixU3D_bottomup">GitHub</a></p>
+public bool IsCellOccupied(Vector2Int gridPos)
+{
+    return occupiedCells.Contains(gridPos);  // O(1)
+}</code></pre>
+                </div>
+            </section>
+            
+            <section id="optimization" class="section">
+                <h2 class="section-title">⚡ 性能优化</h2>
+                
+                <ul>
+                    <li><strong>HashSet 数据结构</strong> - O(1)复杂度的碰撞检测</li>
+                    <li><strong>对象池系统</strong> - VFX特效复用，减少GC</li>
+                    <li><strong>预制体缓存</strong> - 避免频繁资源加载</li>
+                    <li><strong>平滑移动插值</strong> - AnimationCurve实现丝滑动画</li>
+                    <li><strong>事件驱动架构</strong> - 协程+yield实现高效时序控制</li>
+                </ul>
+            </section>
+            
+            <section id="setup" class="section">
+                <h2 class="section-title">🚀 项目设置</h2>
+                
+                <div class="info">
+                    <strong>系统要求</strong><br>
+                    Unity 2021.3 LTS 或更高版本<br>
+                    TextMeshPro 包<br>
+                    Layer Lab GUI Pro 素材包
+                </div>
+                
+                <h3 class="subsection-title">快速开始</h3>
+                
+                <ol>
+                    <li>克隆仓库：<code>git clone https://github.com/NewbieAudioKid/U3D_Shuffle_Snake.git</code></li>
+                    <li>在 Unity 2021.3+ 中打开项目</li>
+                    <li>打开 <code>Assets/Scenes/SplashScene.unity</code></li>
+                    <li>点击 Play 按钮运行游戏</li>
+                </ol>
+                
+                <h3 class="subsection-title">Unity Inspector 设置</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>组件</th>
+                            <th>关键参数</th>
+                            <th>推荐值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>GameManager</td>
+                            <td>Game Time</td>
+                            <td>20秒</td>
+                        </tr>
+                        <tr>
+                            <td>SnakeGridManager</td>
+                            <td>Grid Width × Height</td>
+                            <td>20 × 35</td>
+                        </tr>
+                        <tr>
+                            <td>SnakeGridManager</td>
+                            <td>Cell Size</td>
+                            <td>0.4f</td>
+                        </tr>
+                        <tr>
+                            <td>TouchInputManager</td>
+                            <td>Min/Max Speed Multiplier</td>
+                            <td>0.5x / 2.0x</td>
+                        </tr>
+                        <tr>
+                            <td>VFXManager</td>
+                            <td>Enable Snake Head VFX</td>
+                            <td>✓ 勾选</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <section id="scripts" class="section">
+                <h2 class="section-title">📜 脚本文档</h2>
+                
+                <div class="card">
+                    <div class="card-title">核心脚本列表</div>
+                    <ul>
+                        <li><code>GameManager.cs</code> - 游戏状态、计时器、分数管理</li>
+                        <li><code>SnakeGridManager.cs</code> - 20×35网格系统、碰撞检测、地图生成</li>
+                        <li><code>SnakeController.cs</code> - 蛇移动逻辑、增长、碰撞处理、平滑动画</li>
+                        <li><code>TouchInputManager.cs</code> - 拖拽输入、动态速度控制、区域分离</li>
+                        <li><code>PokerManager.cs</code> - 扑克牌管理、洗牌、显示、弹性动画</li>
+                        <li><code>PokerComboDetector.cs</code> - 斗地主牌型识别算法</li>
+                        <li><code>VFXManager.cs</code> - 特效管理、对象池、蛇头拖尾</li>
+                    </ul>
+                </div>
+                
+                <div class="success">
+                    <strong>Google Style 注释规范</strong><br>
+                    所有脚本都遵循 Google C# Style Guide，包含详细的类说明、方法注释、参数说明和返回值文档。
+                </div>
+            </section>
+            
+            <section id="troubleshooting" class="section">
+                <h2 class="section-title">🐛 问题排查</h2>
+                
+                <div class="warning">
+                    <strong>特效不显示？</strong><br>
+                    设置粒子预制体的 <code>Order in Layer = 999</code><br>
+                    详见：<code>VFX_QuickFix.md</code>
+                </div>
+                
+                <div class="warning">
+                    <strong>扑克牌显示白牌？</strong><br>
+                    确保PNG导入设置为 <code>Sprite (2D and UI)</code><br>
+                    详见：<code>Phase5_PokerCard_Visual_Fix.md</code>
+                </div>
+                
+                <h3 class="subsection-title">更多文档</h3>
+                <ul>
+                    <li><code>Phase1-7_Setup_Guide.md</code> - 分阶段开发指南</li>
+                    <li><code>NewFeatures_Setup_Guide.md</code> - 新功能设置</li>
+                    <li><code>SnakeHeadVFX_Setup_Guide.md</code> - 蛇头拖尾特效</li>
+                    <li><code>ScoreBall_2x2_Implementation.md</code> - 2x2得分球实现</li>
+                    <li><code>VFX_Troubleshooting_Guide.md</code> - 特效问题完整排查</li>
+                </ul>
+            </section>
+            
+            <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted);">
+                <p>Built with ❤️ by NewbieAudioKid</p>
+                <p>Poker Card Snake Game © 2026</p>
             </footer>
         </main>
     </div>
+    
     <script>
-        function toggleCard(header) { header.parentElement.classList.toggle('open'); }
-        function setLang(lang) {
-            document.body.className = 'lang-' + lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]').classList.add('active');
-            localStorage.setItem('pixelflow-lang', lang);
-        }
-        const savedLang = localStorage.getItem('pixelflow-lang');
-        if (savedLang) setLang(savedLang);
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Update active link
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Update active link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>

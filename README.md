@@ -1,10 +1,10 @@
 <div align="center">
 
-# PixelFlow
+# 🐍 Poker Card Snake Game
 
-**一款 2D 益智射击游戏**
+**扑克牌贪吃蛇 - 策略与反应的完美结合**
 
-A 2D Puzzle Shooter Game | 2D パズルシューティングゲーム
+A Poker-Card Driven Snake Game | ポーカーカードスネークゲーム
 
 ---
 
@@ -12,7 +12,7 @@ A 2D Puzzle Shooter Game | 2D パズルシューティングゲーム
 [![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)](https://docs.microsoft.com/dotnet/csharp/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-### [技术文档 / Documentation / ドキュメント](https://newbieaudiokid.github.io/PixU3D_bottomup/)
+### [📖 技术文档 Technical Documentation](https://newbieaudiokid.github.io/U3D_Shuffle_Snake/)
 
 [中文](#中文) | [English](#english) | [日本語](#日本語)
 
@@ -22,216 +22,366 @@ A 2D Puzzle Shooter Game | 2D パズルシューティングゲーム
 
 <a name="中文"></a>
 
-## 概述
+## 🎮 游戏概述
 
-PixelFlow 是一款策略益智游戏。彩色射手在传送带上巡逻，自动射击匹配颜色的方块。玩家需要策略性地从备战台部署射手到准备队列，然后送上传送带，清除网格中的所有方块。
+Poker Card Snake Game 是一款创新的贪吃蛇变体游戏，融合了扑克牌抽取机制和经典贪吃蛇玩法。玩家通过洗牌抽取扑克牌组合来生成地图元素，同时控制贪吃蛇吃球得分，在20秒内挑战高分！
 
-### 核心玩法
+### 🌟 核心玩法
 
-- **选择射手** - 点击备战台(ShooterTable)上的射手，移动到准备队列(ReadyQueue)，最多 5 个槽位
-- **部署传送带** - 点击队列中的射手，开始传送带巡逻
-- **自动射击** - 射手沿传送带移动，自动射击颜色匹配的方块
-- **颜色阻挡** - 异色方块会阻挡射线，不会穿透击中后面的同色方块
-- **胜利条件** - 清除网格中所有方块
-- **失败条件** - 射手返回时准备队列已满
+#### 🎴 扑克牌系统
+- **洗牌机制** - 点击扑克区域随机抽取6张牌（0.1秒冷却）
+- **组合识别** - 自动识别斗地主牌型（对子、三张、顺子、飞机等）
+- **动态地图** - 不同牌型生成不同的地图元素：
+  - 对子/三张 → 20%障碍物 或 80%得分球
+  - 三带一/三带二 → 10个得分球
+  - 顺子/连对 → 20个得分球
+  - 飞机/四带二 → 40个得分球
 
-### 绝地反击机制
+#### 🐍 贪吃蛇系统
+- **网格系统** - 20×35的大型游戏区域
+- **8方向移动** - 支持上下左右和4个斜角方向
+- **拖拽控制** - 拖拽距离控制速度，越长越快（0.5x - 2.0x）
+- **屏幕穿越** - 支持四个方向的边界穿越
+- **2x2得分球** - 更大的目标，更容易吃到！
 
-当备战台和准备队列都为空时，当前射手触发"绝地反击"模式，获得 **2 倍速度加成**，自动重新进入传送带直到弹药耗尽。这是翻盘的最后机会！
+#### ⏱️ 游戏限制
+- **20秒倒计时** - 时间到游戏胜利，显示最终分数
+- **即时失败** - 撞到障碍物或自己即刻结束游戏
 
-### 核心技术亮点
+### ✨ 特效系统
 
-- **PreCalculatePath 预计算算法** - 射手上传送带前模拟 80 步路径，预计算所有射击点生成"射击排期表"
-- **GetTargetCellSmart 智能穿透查找** - 根据射手位置判断区域，支持**颜色阻挡判定**（异色方块阻挡射线）+ **isPendingDeath 穿透**（已被预定的方块视为透明）
-- **Ground Truth 射击系统** - 子弹从预计算的理论位置发射，确保帧率波动不影响射击精度
-- **sqrMagnitude 高性能碰撞** - 子弹碰撞检测使用平方距离替代开方运算，提升性能
-- **协程驱动事件流** - 使用 IEnumerator + yield 实现复杂时序控制和动画编排
+#### 粒子特效（使用 Layer Lab 素材）
+- **吃球特效** ⭐ - 星星爆炸效果
+- **洗牌特效** 🎴 - 卡牌飞舞效果
+- **胜利特效** 🎆 - 烟花庆祝效果
+- **失败特效** 💨 - 烟雾消散效果
+- **蛇头拖尾** ✨ - 速度越快粒子越多
 
-## 项目结构
+#### UI动画
+- **弹性动画** - 组合名称弹出效果（0→120%→100%）
+- **淡出效果** - 文字缩小+透明度渐变
+
+---
+
+## 🏗️ 项目结构
 
 ```
-Assets/
-├── Scripts/
-│   ├── GameManager.cs                 # 全局状态、场景切换、JSON加载
-│   ├── GameScene/
-│   │   ├── GridManager.cs             # 20x20网格、智能目标查找、胜利检测
-│   │   ├── PigController.cs           # 射手状态机、预计算射击、绝地反击
-│   │   ├── CellController.cs          # 方块生命周期、isPendingDeath占位
-│   │   ├── BeltWalker.cs              # 传送带移动、2倍速支持
-│   │   ├── ReadyQueueManager.cs       # 5槽位队列、Shift Left补位
-│   │   ├── ShooterTableManager.cs     # 5x6备战台、堆栈式顶上
-│   │   ├── BulletController.cs        # 子弹飞行、距离检测碰撞
-│   │   └── BeltPathHolder.cs          # 路径点容器
-│   ├── UIScripts/
-│   │   ├── GameResultPopup.cs         # 胜利/失败弹窗、AnimationCurve动画
-│   │   ├── SceneFader.cs              # 场景淡入淡出
-│   │   └── SplashController.cs        # 启动画面
-│   └── Level/
-│       └── LevelDataGenerator.cs      # [ContextMenu]编辑器关卡生成工具
-├── Resources/
-│   └── Levels/                        # Level_X_grid.json + Level_X_table.json
-└── Scenes/
-    ├── SplashScene.unity              # 启动画面
-    ├── MenuScene.unity                # 主菜单
-    └── GameScene.unity                # 游戏场景
+U3D_Shuffle_Snake/
+├── Assets/
+│   ├── Scripts/
+│   │   ├── GameManager.cs                 # 游戏状态、计时器、分数管理
+│   │   ├── GameScene/
+│   │   │   ├── SnakeGridManager.cs       # 20×35网格、碰撞检测、地图生成
+│   │   │   ├── SnakeController.cs        # 蛇移动逻辑、增长、碰撞处理
+│   │   │   ├── TouchInputManager.cs      # 拖拽输入、动态速度控制
+│   │   │   ├── PokerManager.cs           # 扑克牌管理、洗牌、显示
+│   │   │   ├── PokerComboDetector.cs     # 斗地主牌型识别
+│   │   │   ├── PokerCardData.cs          # 扑克牌数据结构
+│   │   │   ├── VFXManager.cs             # 特效管理、对象池
+│   │   │   └── CellController.cs         # 格子控制器
+│   │   └── UIScripts/
+│   │       ├── GameResultPopup.cs        # 胜利/失败弹窗
+│   │       ├── TimerDisplay.cs           # 倒计时显示
+│   │       ├── ScoreDisplay.cs           # 分数显示
+│   │       └── Animation/
+│   │           └── SceneFader.cs         # 场景淡入淡出
+│   ├── Resources/
+│   │   └── Poke/
+│   │       ├── cards.csv                 # 扑克牌数据
+│   │       └── png/                      # 扑克牌图片资源
+│   ├── Layer Lab/                        # 粒子特效素材库
+│   └── Scenes/
+│       ├── SplashScene.unity             # 启动画面
+│       ├── MenuScene.unity               # 主菜单
+│       └── GameScene.unity               # 游戏场景
+├── docs/
+│   └── index.html                        # GitHub Pages 技术文档
+└── Phase*_Setup_Guide.md                 # 各阶段设置指南
 ```
 
-## 系统要求
+---
 
-- Unity 2021.3 LTS 或更高版本
-- TextMeshPro 包
+## 🎯 技术亮点
 
-## 快速开始
+### 核心算法
 
-1. 克隆仓库
-2. 在 Unity 中打开项目
-3. 打开 `Assets/Scenes/SplashScene.unity`
-4. 点击播放
+#### 1. 动态速度系统
+```csharp
+// 拖拽距离 → 速度倍数（线性插值）
+float speedMultiplier = Mathf.Lerp(
+    minSpeedMultiplier,  // 0.5x (短距离)
+    maxSpeedMultiplier,  // 2.0x (长距离)
+    dragDistance / maxDragDistance
+);
+```
+
+#### 2. 2x2得分球碰撞优化
+```csharp
+// 占据4个格子，蛇头碰到任意一格都算吃到
+// 碰撞面积增加4倍，大幅提升游戏体验
+for (int x = 0; x < 2; x++)
+    for (int y = 0; y < 2; y++)
+        RegisterCell(bottomLeft + new Vector2Int(x, y), CellType.ScoreBall, ball);
+```
+
+#### 3. 扑克牌组合识别（斗地主规则）
+```csharp
+// 支持识别：单张、对子、三张、三带一、三带二
+// 顺子、连对、飞机、四带二 等复杂牌型
+public PokerComboResult DetectCombo(List<PokerCard> cards)
+{
+    // 从复杂到简单依次检测
+    if (TryDetectFourWithTwo(...)) return result;
+    if (TryDetectPlane(...)) return result;
+    // ...
+}
+```
+
+#### 4. 屏幕穿越算法
+```csharp
+// 支持四方向边界穿越（左右、上下互通）
+public Vector2Int WrapGridPosition(Vector2Int gridPos)
+{
+    int newX = (gridPos.x + gridWidth) % gridWidth;
+    int newY = (gridPos.y + gridHeight) % gridHeight;
+    return new Vector2Int(newX, newY);
+}
+```
+
+### 性能优化
+
+- **HashSet 碰撞检测** - O(1)复杂度的占用格子查询
+- **对象池系统** - VFX特效复用，减少GC压力
+- **预制体缓存** - 避免频繁的资源加载
+- **平滑移动插值** - 使用AnimationCurve实现丝滑动画
+
+### 设计模式
+
+- **单例模式** - 全局管理器（GameManager, VFXManager等）
+- **组件化设计** - 高内聚低耦合的脚本架构
+- **事件驱动** - 协程驱动的游戏流程
+- **状态机** - 清晰的游戏状态管理
+
+---
+
+## 📦 系统要求
+
+- **Unity** 2021.3 LTS 或更高版本
+- **TextMeshPro** 包（已内置）
+- **Layer Lab GUI Pro** 粒子特效素材包
+
+---
+
+## 🚀 快速开始
+
+### 1. 克隆仓库
+```bash
+git clone https://github.com/NewbieAudioKid/U3D_Shuffle_Snake.git
+cd U3D_Shuffle_Snake
+```
+
+### 2. 在 Unity 中打开
+1. 打开 Unity Hub
+2. 选择 "Add" → 选择项目文件夹
+3. 使用 Unity 2021.3+ 打开
+
+### 3. 运行游戏
+1. 打开 `Assets/Scenes/SplashScene.unity`
+2. 点击 Play 按钮
+3. 开始游戏！
+
+---
+
+## 📖 开发指南
+
+### Phase 1-7 完整开发流程
+
+项目采用 **Bottom-Up** 开发模式，分7个阶段完成：
+
+1. **Phase 1**: 网格系统和基础框架
+2. **Phase 2**: 贪吃蛇移动逻辑
+3. **Phase 3**: 触摸输入系统
+4. **Phase 4**: 测试场景和碰撞检测
+5. **Phase 5**: 扑克牌管理系统
+6. **Phase 6**: 扑克牌→地图联动
+7. **Phase 7**: 计时器和游戏结束
+
+详见各阶段的 `Phase*_Setup_Guide.md` 文档。
+
+### 新功能文档
+
+- `NewFeatures_Setup_Guide.md` - 动态速度、弹性动画、特效系统
+- `SnakeHeadVFX_Setup_Guide.md` - 蛇头拖尾特效
+- `ScoreBall_2x2_Implementation.md` - 2x2得分球实现
+- `VFX_Troubleshooting_Guide.md` - 特效问题排查
+
+---
+
+## 🎨 美术资源
+
+### 扑克牌
+- 来源：`Assets/Resources/Poke/`
+- 格式：PNG透明背景
+- 规格：54张标准扑克牌
+
+### 粒子特效
+- 来源：Layer Lab GUI Pro - CasualGame
+- 包含：30+ 种粒子效果预制体
+- 风格：2D卡通风格
+
+---
+
+## 🔧 配置说明
+
+### Unity Inspector 关键设置
+
+#### GameManager
+- Game Time: 20秒
+- 自动场景切换支持
+
+#### SnakeGridManager
+- Grid Width: 20
+- Grid Height: 35  
+- Cell Size: 0.4f
+- Grid Offset: (-4, -7) - 对齐红色区域
+
+#### TouchInputManager
+- Min Speed Multiplier: 0.5x
+- Max Speed Multiplier: 2.0x
+- Poker Zone Height Ratio: 0.2 (屏幕下方20%)
+
+#### VFXManager
+- Enable Snake Head VFX: ✓
+- Min/Max Trail Emission: 10/50
+- Object Pooling: ✓
+
+---
+
+## 🐛 已知问题
+
+### 特效不显示
+**解决方案**：设置粒子预制体的 `Order in Layer = 999`
+详见：`VFX_QuickFix.md`
+
+### 扑克牌显示白牌
+**解决方案**：确保PNG导入设置为 Sprite (2D and UI)
+详见：`Phase5_PokerCard_Visual_Fix.md`
+
+---
+
+## 📝 更新日志
+
+### v1.0.0 (2026-01-12)
+- ✅ 完整的贪吃蛇游戏逻辑
+- ✅ 扑克牌洗牌和组合识别系统
+- ✅ 动态速度控制（拖拽距离）
+- ✅ 完整的粒子特效系统
+- ✅ 2x2大型得分球
+- ✅ 20秒倒计时
+- ✅ 完整的UI和动画系统
+
+---
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
+
+---
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
+
+---
+
+## 👥 作者
+
+**NewbieAudioKid**
+- GitHub: [@NewbieAudioKid](https://github.com/NewbieAudioKid)
 
 ---
 
 <a name="english"></a>
 
-## Overview
+## 🎮 Game Overview
 
-PixelFlow is a strategic puzzle game where colored shooters patrol a conveyor belt, automatically firing at matching cells. Players must strategically deploy shooters from the table to the ready queue, then onto the belt to clear all cells from the grid.
+Poker Card Snake Game is an innovative snake game variant that combines poker card mechanics with classic snake gameplay. Players draw poker card combinations to generate map elements while controlling a snake to eat score balls and achieve high scores within 20 seconds!
 
-### Core Mechanics
+### 🌟 Core Gameplay
 
-- **Select Shooters** - Click shooters from the table to move them to the ready queue (5 slots max)
-- **Deploy to Belt** - Click a queued shooter to start conveyor belt patrol
-- **Auto-Fire** - Shooters automatically fire at cells matching their color
-- **Color Blocking** - Different-color cells block shots, no penetration to same-color cells behind
-- **Win Condition** - Clear all cells from the grid
-- **Lose Condition** - Ready queue is full when a shooter returns
+#### 🎴 Poker Card System
+- **Shuffle Mechanic** - Click poker area to randomly draw 6 cards (0.1s cooldown)
+- **Combo Detection** - Auto-detect Dou Dizhu poker patterns (Pair, Three, Straight, etc.)
+- **Dynamic Map** - Different combos generate different map elements
 
-### Last Stand Mechanic
+#### 🐍 Snake System
+- **Grid System** - 20×35 large game area
+- **8-Direction Movement** - Cardinal + diagonal directions
+- **Drag Control** - Drag distance controls speed (0.5x - 2.0x)
+- **Screen Wrapping** - Four-way boundary wrapping
+- **2x2 Score Balls** - Larger targets, easier to catch!
 
-When both the shooter table and ready queue are empty, the current shooter triggers "Last Stand" mode with **2x speed bonus**, automatically re-entering the conveyor belt until ammunition depletes.
+#### ⏱️ Game Limits
+- **20-Second Countdown** - Victory on time-up, displays final score
+- **Instant Failure** - Hit obstacles or self to end game
 
-### Technical Highlights
+### ✨ VFX System
 
-- **PreCalculatePath Algorithm** - Simulates 80-step belt path before entry, pre-calculates all shot points into a "shot schedule"
-- **GetTargetCellSmart Zone Lookup** - Zone-based scan with **color blocking** (different-color cells block shots) + **isPendingDeath penetration** (pre-targeted cells are transparent)
-- **Ground Truth Firing System** - Bullets fire from pre-calculated theoretical positions, ensuring frame-rate independent accuracy
-- **sqrMagnitude High-Performance Collision** - Uses squared distance instead of sqrt for bullet collision detection
-- **Coroutine-Driven Event Flow** - Uses IEnumerator + yield for complex timing control and animation orchestration
+#### Particle Effects (Layer Lab Assets)
+- **Collect Ball VFX** ⭐
+- **Shuffle Cards VFX** 🎴
+- **Victory VFX** 🎆  
+- **Game Over VFX** 💨
+- **Snake Head Trail** ✨
 
-## Project Structure
+---
 
-```
-Assets/
-├── Scripts/
-│   ├── GameManager.cs                 # Global state, scene transitions, JSON loading
-│   ├── GameScene/
-│   │   ├── GridManager.cs             # 20x20 grid, smart target lookup, win detection
-│   │   ├── PigController.cs           # Shooter state machine, pre-calculated shots, last stand
-│   │   ├── CellController.cs          # Cell lifecycle, isPendingDeath flag
-│   │   ├── BeltWalker.cs              # Belt movement, 2x speed support
-│   │   ├── ReadyQueueManager.cs       # 5-slot queue, Shift Left algorithm
-│   │   ├── ShooterTableManager.cs     # 5x6 table, stack-like auto-rise
-│   │   ├── BulletController.cs        # Bullet flight, distance-based collision
-│   │   └── BeltPathHolder.cs          # Waypoint container
-│   ├── UIScripts/
-│   │   ├── GameResultPopup.cs         # Victory/GameOver popup, AnimationCurve
-│   │   ├── SceneFader.cs              # Scene fade transitions
-│   │   └── SplashController.cs        # Splash screen
-│   └── Level/
-│       └── LevelDataGenerator.cs      # [ContextMenu] Editor level generation tool
-├── Resources/
-│   └── Levels/                        # Level_X_grid.json + Level_X_table.json
-└── Scenes/
-    ├── SplashScene.unity
-    ├── MenuScene.unity
-    └── GameScene.unity
-```
-
-## Requirements
+## 📦 Requirements
 
 - Unity 2021.3 LTS or higher
 - TextMeshPro package
+- Layer Lab GUI Pro particle effects
 
-## Getting Started
+---
 
-1. Clone the repository
-2. Open project in Unity
-3. Open `Assets/Scenes/SplashScene.unity`
-4. Press Play
+## 🚀 Quick Start
+
+```bash
+git clone https://github.com/NewbieAudioKid/U3D_Shuffle_Snake.git
+```
+
+1. Open in Unity 2021.3+
+2. Open `Assets/Scenes/SplashScene.unity`
+3. Press Play
 
 ---
 
 <a name="日本語"></a>
 
-## 概要
+## 🎮 ゲーム概要
 
-PixelFlow は戦略パズルゲームです。色付きシューターがコンベアベルトを巡回し、一致するセルに自動的に発射します。プレイヤーはテーブルからシューターを待機キューに戦略的に配置し、ベルトに送ってグリッドからすべてのセルをクリアする必要があります。
+Poker Card Snake Game は、ポーカーカードメカニクスとクラシックなスネークゲームプレイを組み合わせた革新的なスネークゲームです。
 
-### ゲームプレイ
+### 🌟 コアゲームプレイ
 
-- **シューター選択** - テーブルからシューターをクリックして待機キューに移動（最大 5 スロット）
-- **ベルトへ配置** - キュー内のシューターをクリックしてベルトパトロールを開始
-- **自動発射** - シューターは同じ色のセルに自動的に発射
-- **色ブロッキング** - 異色セルはショットをブロック、後ろの同色セルに貫通しない
-- **勝利条件** - グリッドからすべてのセルをクリア
-- **敗北条件** - シューターが戻ったとき待機キューが満杯
-
-### ラストスタンドメカニクス
-
-シューターテーブルと待機キューの両方が空のとき、現在のシューターは「ラストスタンド」モードを発動し、**2 倍のスピードボーナス**を得て、弾薬が尽きるまで自動的にコンベアベルトに再突入します。
-
-### 技術的ハイライト
-
-- **PreCalculatePath アルゴリズム** - ベルト進入前に 80 ステップのパスをシミュレート、すべてのショットポイントを事前計算
-- **GetTargetCellSmart ゾーン検索** - **色ブロッキング**（異色セルはショットをブロック）+ **isPendingDeath 穿透**（予約済みセルは透明）
-- **Ground Truth 射撃システム** - 事前計算された理論位置から発射、フレームレート変動に依存しない精度
-- **sqrMagnitude 高性能衝突** - 弾丸衝突検出に平方距離を使用（sqrt 回避）
-- **コルーチン駆動イベントフロー** - IEnumerator + yield で複雑なタイミング制御
-
-## プロジェクト構造
-
-```
-Assets/
-├── Scripts/
-│   ├── GameManager.cs                 # グローバル状態、シーン遷移、JSONロード
-│   ├── GameScene/
-│   │   ├── GridManager.cs             # 20x20グリッド、スマートターゲット検索
-│   │   ├── PigController.cs           # シューター状態マシン、事前計算ショット
-│   │   ├── CellController.cs          # セルライフサイクル
-│   │   ├── BeltWalker.cs              # ベルト移動、2倍速サポート
-│   │   ├── ReadyQueueManager.cs       # 5スロットキュー
-│   │   ├── ShooterTableManager.cs     # 5x6テーブル
-│   │   ├── BulletController.cs        # 弾丸飛行
-│   │   └── BeltPathHolder.cs          # ウェイポイントコンテナ
-│   ├── UIScripts/
-│   │   ├── GameResultPopup.cs         # 勝利/ゲームオーバーポップアップ
-│   │   ├── SceneFader.cs              # シーンフェード
-│   │   └── SplashController.cs        # スプラッシュスクリーン
-│   └── Level/
-│       └── LevelDataGenerator.cs      # エディタレベル生成ツール
-├── Resources/
-│   └── Levels/                        # JSONレベルデータ
-└── Scenes/
-    ├── SplashScene.unity
-    ├── MenuScene.unity
-    └── GameScene.unity
-```
-
-## 動作環境
-
-- Unity 2021.3 LTS 以降
-- TextMeshPro パッケージ
-
-## はじめに
-
-1. リポジトリをクローン
-2. Unity でプロジェクトを開く
-3. `Assets/Scenes/SplashScene.unity`を開く
-4. プレイを押す
+- **シャッフルメカニズム** - ポーカーエリアをクリックして6枚のカードをランダムに引く
+- **コンボ検出** - 闘地主のポーカーパターンを自動検出
+- **8方向移動** - 上下左右+4つの斜め方向をサポート
+- **ドラッグコントロール** - ドラッグ距離で速度を制御
+- **20秒カウントダウン** - タイムアップで勝利
 
 ---
 
 <div align="center">
 
-**Built with Unity**
+**Built with Unity 🎮**
+
+Made with ❤️ by NewbieAudioKid
 
 </div>

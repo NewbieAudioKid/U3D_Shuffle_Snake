@@ -1,39 +1,37 @@
+// ================================================================================
+// TL;DR:
+// 菜单关卡显示（新版本：贪吃蛇游戏不需要关卡系统）
+// 简化版本，显示最高分或保持空白
+//
+// 目标：
+// - 在菜单界面显示游戏信息（可选）
+//
+// 非目标：
+// - 不显示关卡信息（新游戏无关卡系统）
+// ================================================================================
 using UnityEngine;
-using TMPro; // 必须引用
+using TMPro;
 
 public class MenuLevelDisplay : MonoBehaviour
 {
-    [Header("请按顺序拖入 Bottom_1 到 Bottom_4 的数字文本")]
-    public TextMeshProUGUI[] levelTexts; // 数组存4个文本组件
+    [Header("可选：显示最高分")]
+    public TextMeshProUGUI[] levelTexts; // 可以用来显示其他信息
 
     void Start()
     {
-        UpdateLevelNumbers();
+        UpdateDisplay();
     }
 
-    // 每次回到主菜单时（OnEnable）也刷新一下，防止数据过时
     void OnEnable()
     {
-        UpdateLevelNumbers();
+        UpdateDisplay();
     }
 
-    void UpdateLevelNumbers()
+    void UpdateDisplay()
     {
-        if (GameManager.Instance == null) return;
-
-        // 1. 获取当前关卡数字 (例如 5)
-        int currentLevel = GameManager.Instance.GetCurrentLevelNum();
-
-        // 2. 循环更新 4 个图标
-        // levelTexts[0] 是 Bottom_1 -> 显示 5
-        // levelTexts[1] 是 Bottom_2 -> 显示 6 ...
-        for (int i = 0; i < levelTexts.Length; i++)
-        {
-            if (levelTexts[i] != null)
-            {
-                // i=0 显示 current+0, i=1 显示 current+1...
-                levelTexts[i].text = (currentLevel + i).ToString();
-            }
-        }
+        // 如果需要显示最高分，可以在这里实现
+        // 例如：levelTexts[0].text = "High Score: " + GameManager.Instance.highScore;
+        
+        // 目前保持为空，不显示任何内容
     }
 }

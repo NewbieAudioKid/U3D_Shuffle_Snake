@@ -2771,6 +2771,7 @@ GameObject:
   - component: {fileID: 875119874}
   - component: {fileID: 875119876}
   - component: {fileID: 875119877}
+  - component: {fileID: 875119878}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2790,7 +2791,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2942b8d7bb0a94c1da79274819faf430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevelName: Level_1
+  currentScore: 0
+  highScore: 0
+  gameTime: 20
+  remainingTime: 20
+  isGameRunning: 0
 --- !u!4 &875119875
 Transform:
   m_ObjectHideFlags: 0
@@ -2830,6 +2835,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6200a4a8c71042baa85540ac095a66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &875119878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875119873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2942b8d7bb0a94c1da79274819faf430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentScore: 0
+  highScore: 0
+  gameTime: 20
+  remainingTime: 20
+  isGameRunning: 0
 --- !u!1 &883962471
 GameObject:
   m_ObjectHideFlags: 0
@@ -4782,7 +4804,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 77c2c5f8669cf43aab6276e42dbc8f74, type: 3}
+  m_Texture: {fileID: 2800000, guid: ba5b72c8a474e41cd952cf4c7aa91822, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
