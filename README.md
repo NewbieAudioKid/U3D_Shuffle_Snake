@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🐍 Poker Card Snake Game
+# Poker Card Snake Game
 
 **扑克牌贪吃蛇 - 策略与反应的完美结合**
 
@@ -12,7 +12,7 @@ A Poker-Card Driven Snake Game | ポーカーカードスネークゲーム
 [![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)](https://docs.microsoft.com/dotnet/csharp/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-### [📖 技术文档 Technical Documentation](https://newbieaudiokid.github.io/U3D_Shuffle_Snake/)
+### [技术文档 Technical Documentation](https://newbieaudiokid.github.io/U3D_Shuffle_Snake/)
 
 [中文](#中文) | [English](#english) | [日本語](#日本語)
 
@@ -22,13 +22,13 @@ A Poker-Card Driven Snake Game | ポーカーカードスネークゲーム
 
 <a name="中文"></a>
 
-## 🎮 游戏概述
+## 游戏概述
 
 Poker Card Snake Game 是一款创新的贪吃蛇变体游戏，融合了扑克牌抽取机制和经典贪吃蛇玩法。玩家通过洗牌抽取扑克牌组合来生成地图元素，同时控制贪吃蛇吃球得分，在20秒内挑战高分！
 
-### 🌟 核心玩法
+### 核心玩法
 
-#### 🎴 扑克牌系统
+#### 扑克牌系统
 - **洗牌机制** - 点击扑克区域随机抽取6张牌（0.1秒冷却）
 - **组合识别** - 自动识别斗地主牌型（对子、三张、顺子、飞机等）
 - **动态地图** - 不同牌型生成不同的地图元素：
@@ -37,25 +37,25 @@ Poker Card Snake Game 是一款创新的贪吃蛇变体游戏，融合了扑克�
   - 顺子/连对 → 20个得分球
   - 飞机/四带二 → 40个得分球
 
-#### 🐍 贪吃蛇系统
+#### 贪吃蛇系统
 - **网格系统** - 20×35的大型游戏区域
 - **8方向移动** - 支持上下左右和4个斜角方向
 - **拖拽控制** - 拖拽距离控制速度，越长越快（0.5x - 2.0x）
 - **屏幕穿越** - 支持四个方向的边界穿越
 - **2x2得分球** - 更大的目标，更容易吃到！
 
-#### ⏱️ 游戏限制
+#### 游戏限制
 - **20秒倒计时** - 时间到游戏胜利，显示最终分数
 - **即时失败** - 撞到障碍物或自己即刻结束游戏
 
-### ✨ 特效系统
+### 特效系统
 
 #### 粒子特效（使用 Layer Lab 素材）
-- **吃球特效** ⭐ - 星星爆炸效果
-- **洗牌特效** 🎴 - 卡牌飞舞效果
-- **胜利特效** 🎆 - 烟花庆祝效果
-- **失败特效** 💨 - 烟雾消散效果
-- **蛇头拖尾** ✨ - 速度越快粒子越多
+- **吃球特效** - 星星爆炸效果
+- **洗牌特效** - 卡牌飞舞效果
+- **胜利特效** - 烟花庆祝效果
+- **失败特效** - 烟雾消散效果
+- **蛇头拖尾** - 速度越快粒子越多
 
 #### UI动画
 - **弹性动画** - 组合名称弹出效果（0→120%→100%）
@@ -63,7 +63,7 @@ Poker Card Snake Game 是一款创新的贪吃蛇变体游戏，融合了扑克�
 
 ---
 
-## 🏗️ 项目结构
+## 项目结构
 
 ```
 U3D_Shuffle_Snake/
@@ -101,7 +101,7 @@ U3D_Shuffle_Snake/
 
 ---
 
-## 🎯 技术亮点
+## 技术亮点
 
 ### 核心算法
 
@@ -164,7 +164,7 @@ public Vector2Int WrapGridPosition(Vector2Int gridPos)
 
 ---
 
-## 📦 系统要求
+## 系统要求
 
 - **Unity** 2021.3 LTS 或更高版本
 - **TextMeshPro** 包（已内置）
@@ -172,7 +172,7 @@ public Vector2Int WrapGridPosition(Vector2Int gridPos)
 
 ---
 
-## 🚀 快速开始
+## 快速开始
 
 ### 1. 克隆仓库
 ```bash
@@ -192,7 +192,7 @@ cd U3D_Shuffle_Snake
 
 ---
 
-## 📖 开发指南
+## 开发指南
 
 ### Phase 1-7 完整开发流程
 
@@ -217,7 +217,7 @@ cd U3D_Shuffle_Snake
 
 ---
 
-## 🎨 美术资源
+## 美术资源
 
 ### 扑克牌
 - 来源：`Assets/Resources/Poke/`
@@ -231,7 +231,7 @@ cd U3D_Shuffle_Snake
 
 ---
 
-## 🔧 配置说明
+## 配置说明
 
 ### Unity Inspector 关键设置
 
@@ -251,38 +251,38 @@ cd U3D_Shuffle_Snake
 - Poker Zone Height Ratio: 0.2 (屏幕下方20%)
 
 #### VFXManager
-- Enable Snake Head VFX: ✓
+- Enable Snake Head VFX: 是
 - Min/Max Trail Emission: 10/50
-- Object Pooling: ✓
+- Object Pooling: 是
 
 ---
 
-## 🐛 已知问题
+## 已知问题
 
 ### 特效不显示
-**解决方案**：设置粒子预制体的 `Order in Layer = 999`
+**解决方案**：设置粒子预制体的 `Order in Layer = 999`  
 详见：`VFX_QuickFix.md`
 
 ### 扑克牌显示白牌
-**解决方案**：确保PNG导入设置为 Sprite (2D and UI)
+**解决方案**：确保PNG导入设置为 Sprite (2D and UI)  
 详见：`Phase5_PokerCard_Visual_Fix.md`
 
 ---
 
-## 📝 更新日志
+## 更新日志
 
 ### v1.0.0 (2026-01-12)
-- ✅ 完整的贪吃蛇游戏逻辑
-- ✅ 扑克牌洗牌和组合识别系统
-- ✅ 动态速度控制（拖拽距离）
-- ✅ 完整的粒子特效系统
-- ✅ 2x2大型得分球
-- ✅ 20秒倒计时
-- ✅ 完整的UI和动画系统
+- 完整的贪吃蛇游戏逻辑
+- 扑克牌洗牌和组合识别系统
+- 动态速度控制（拖拽距离）
+- 完整的粒子特效系统
+- 2x2大型得分球
+- 20秒倒计时
+- 完整的UI和动画系统
 
 ---
 
-## 🤝 贡献
+## 贡献
 
 欢迎提交 Issue 和 Pull Request！
 
@@ -294,55 +294,55 @@ cd U3D_Shuffle_Snake
 
 ---
 
-## 📄 许可证
+## 许可证
 
 本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
 
 ---
 
-## 👥 作者
+## 作者
 
-**NewbieAudioKid**
-- GitHub: [@NewbieAudioKid](https://github.com/NewbieAudioKid)
+**NewbieAudioKid**  
+GitHub: [@NewbieAudioKid](https://github.com/NewbieAudioKid)
 
 ---
 
 <a name="english"></a>
 
-## 🎮 Game Overview
+## Game Overview
 
 Poker Card Snake Game is an innovative snake game variant that combines poker card mechanics with classic snake gameplay. Players draw poker card combinations to generate map elements while controlling a snake to eat score balls and achieve high scores within 20 seconds!
 
-### 🌟 Core Gameplay
+### Core Gameplay
 
-#### 🎴 Poker Card System
+#### Poker Card System
 - **Shuffle Mechanic** - Click poker area to randomly draw 6 cards (0.1s cooldown)
 - **Combo Detection** - Auto-detect Dou Dizhu poker patterns (Pair, Three, Straight, etc.)
 - **Dynamic Map** - Different combos generate different map elements
 
-#### 🐍 Snake System
+#### Snake System
 - **Grid System** - 20×35 large game area
 - **8-Direction Movement** - Cardinal + diagonal directions
 - **Drag Control** - Drag distance controls speed (0.5x - 2.0x)
 - **Screen Wrapping** - Four-way boundary wrapping
 - **2x2 Score Balls** - Larger targets, easier to catch!
 
-#### ⏱️ Game Limits
+#### Game Limits
 - **20-Second Countdown** - Victory on time-up, displays final score
 - **Instant Failure** - Hit obstacles or self to end game
 
-### ✨ VFX System
+### VFX System
 
 #### Particle Effects (Layer Lab Assets)
-- **Collect Ball VFX** ⭐
-- **Shuffle Cards VFX** 🎴
-- **Victory VFX** 🎆  
-- **Game Over VFX** 💨
-- **Snake Head Trail** ✨
+- **Collect Ball VFX** - Star explosion effect
+- **Shuffle Cards VFX** - Card flying effect
+- **Victory VFX** - Firework celebration effect
+- **Game Over VFX** - Smoke dissipation effect
+- **Snake Head Trail** - More particles at higher speeds
 
 ---
 
-## 📦 Requirements
+## Requirements
 
 - Unity 2021.3 LTS or higher
 - TextMeshPro package
@@ -350,7 +350,7 @@ Poker Card Snake Game is an innovative snake game variant that combines poker ca
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 git clone https://github.com/NewbieAudioKid/U3D_Shuffle_Snake.git
@@ -364,11 +364,11 @@ git clone https://github.com/NewbieAudioKid/U3D_Shuffle_Snake.git
 
 <a name="日本語"></a>
 
-## 🎮 ゲーム概要
+## ゲーム概要
 
 Poker Card Snake Game は、ポーカーカードメカニクスとクラシックなスネークゲームプレイを組み合わせた革新的なスネークゲームです。
 
-### 🌟 コアゲームプレイ
+### コアゲームプレイ
 
 - **シャッフルメカニズム** - ポーカーエリアをクリックして6枚のカードをランダムに引く
 - **コンボ検出** - 闘地主のポーカーパターンを自動検出
@@ -380,8 +380,8 @@ Poker Card Snake Game は、ポーカーカードメカニクスとクラシッ�
 
 <div align="center">
 
-**Built with Unity 🎮**
+**Built with Unity**
 
-Made with ❤️ by NewbieAudioKid
+Made by NewbieAudioKid
 
 </div>

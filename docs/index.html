@@ -7,23 +7,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --bg-code: #334155;
-            --border: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --accent: #8b5cf6;
-            --accent-light: #a78bfa;
-            --accent-bg: #2e1065;
-            --success: #10b981;
-            --success-bg: #064e3b;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-            --radius: 12px;
+            --bg-main: #ffffff;
+            --bg-card: #f8f9fa;
+            --bg-code: #f5f7f9;
+            --border: #dee2e6;
+            --border-light: #e9ecef;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            --accent: #1e3a8a;
+            --accent-light: #3b82f6;
+            --accent-bg: #eff6ff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --radius: 8px;
             --sidebar-width: 280px;
         }
         
@@ -61,7 +58,7 @@
         .logo h1 {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--accent-light);
+            color: var(--accent);
             margin-bottom: 0.5rem;
         }
         
@@ -98,14 +95,14 @@
         }
         
         .nav-links li a:hover {
-            background: rgba(139, 92, 246, 0.1);
-            color: var(--accent-light);
-            border-left-color: var(--accent);
+            background: var(--accent-bg);
+            color: var(--accent);
+            border-left-color: var(--accent-light);
         }
         
         .nav-links li a.active {
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--accent-light);
+            background: var(--accent-bg);
+            color: var(--accent);
             border-left-color: var(--accent);
             font-weight: 500;
         }
@@ -120,16 +117,14 @@
         .header {
             margin-bottom: 3rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 2px solid var(--border);
         }
         
         .header h1 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent-light), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--accent);
         }
         
         .header p {
@@ -141,7 +136,8 @@
             display: inline-block;
             padding: 0.25rem 0.75rem;
             background: var(--accent-bg);
-            color: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid var(--accent-light);
             border-radius: 9999px;
             font-size: 0.875rem;
             font-weight: 500;
@@ -157,14 +153,16 @@
             font-size: 1.75rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            color: var(--text-primary);
+            color: var(--accent);
+            border-bottom: 2px solid var(--border-light);
+            padding-bottom: 0.5rem;
         }
         
         .subsection-title {
             font-size: 1.25rem;
             font-weight: 600;
             margin: 2rem 0 1rem;
-            color: var(--text-secondary);
+            color: var(--text-primary);
         }
         
         .card {
@@ -180,7 +178,7 @@
             font-size: 1.125rem;
             font-weight: 600;
             margin-bottom: 0.75rem;
-            color: var(--accent-light);
+            color: var(--accent);
         }
         
         .feature-grid {
@@ -201,19 +199,14 @@
         .feature-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-            border-color: var(--accent);
-        }
-        
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            border-color: var(--accent-light);
         }
         
         .feature-title {
             font-size: 1.125rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--accent-light);
+            color: var(--accent);
         }
         
         .feature-desc {
@@ -227,7 +220,8 @@
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
             font-size: 0.875rem;
-            color: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid var(--border-light);
         }
         
         pre {
@@ -243,6 +237,7 @@
             background: none;
             padding: 0;
             color: var(--text-primary);
+            border: none;
         }
         
         ul, ol {
@@ -264,28 +259,16 @@
             text-decoration: underline;
         }
         
-        .warning {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid var(--warning);
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-        }
-        
-        .success {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid var(--success);
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-        }
-        
-        .info {
-            background: rgba(139, 92, 246, 0.1);
+        .info-box {
+            background: var(--accent-bg);
             border-left: 4px solid var(--accent);
             padding: 1rem 1.5rem;
             border-radius: 0.5rem;
             margin: 1rem 0;
+        }
+        
+        .info-box strong {
+            color: var(--accent);
         }
         
         table {
@@ -293,6 +276,7 @@
             border-collapse: collapse;
             margin: 1.5rem 0;
             background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
             overflow: hidden;
         }
@@ -300,21 +284,17 @@
         th, td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
         }
         
         th {
             background: var(--bg-code);
             font-weight: 600;
-            color: var(--accent-light);
+            color: var(--accent);
         }
         
         tr:last-child td {
             border-bottom: none;
-        }
-        
-        .emoji {
-            font-style: normal;
         }
         
         @media (max-width: 768px) {
@@ -332,7 +312,7 @@
     <div class="layout">
         <aside class="sidebar">
             <div class="logo">
-                <h1>🐍 Poker Snake</h1>
+                <h1>Poker Snake</h1>
                 <p>技术文档</p>
             </div>
             
@@ -388,7 +368,7 @@
             </header>
             
             <section id="overview" class="section">
-                <h2 class="section-title">🎮 游戏概述</h2>
+                <h2 class="section-title">游戏概述</h2>
                 
                 <div class="card">
                     <p>Poker Card Snake Game 是一款创新的贪吃蛇变体游戏，融合了扑克牌抽取机制和经典贪吃蛇玩法。玩家通过洗牌抽取扑克牌组合来动态生成地图元素，同时控制贪吃蛇吃球得分，在20秒内挑战高分！</p>
@@ -398,25 +378,21 @@
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">🎴</div>
                         <div class="feature-title">扑克牌系统</div>
                         <div class="feature-desc">洗牌抽取6张牌，自动识别斗地主牌型，生成对应的地图元素</div>
                     </div>
                     
                     <div class="feature-card">
-                        <div class="feature-icon">🐍</div>
                         <div class="feature-title">贪吃蛇系统</div>
                         <div class="feature-desc">20×35大型网格，8方向移动，拖拽距离控制速度，四方向穿越</div>
                     </div>
                     
                     <div class="feature-card">
-                        <div class="feature-icon">⏱️</div>
                         <div class="feature-title">20秒挑战</div>
                         <div class="feature-desc">时间到游戏胜利，撞到障碍或自己即刻失败，考验反应和策略</div>
                     </div>
                     
                     <div class="feature-card">
-                        <div class="feature-icon">✨</div>
                         <div class="feature-title">特效系统</div>
                         <div class="feature-desc">粒子特效、弹性动画、蛇头拖尾，速度越快特效越炫</div>
                     </div>
@@ -424,7 +400,7 @@
             </section>
             
             <section id="features" class="section">
-                <h2 class="section-title">🌟 核心特性</h2>
+                <h2 class="section-title">核心特性</h2>
                 
                 <div class="card">
                     <div class="card-title">1. 动态速度控制</div>
@@ -487,17 +463,17 @@ float speedMultiplier = Mathf.Lerp(
                     <div class="card-title">4. 粒子特效系统</div>
                     <p>使用 Layer Lab 粒子素材，包含5大类特效：</p>
                     <ul>
-                        <li><strong>吃球特效</strong> ⭐ - Particle_Stars_00（星星爆炸）</li>
-                        <li><strong>洗牌特效</strong> 🎴 - Particle_Card_00（卡牌飞舞）</li>
-                        <li><strong>胜利特效</strong> 🎆 - Particle_Firework_00（烟花庆祝）</li>
-                        <li><strong>失败特效</strong> 💨 - Particle_Smoke_00（烟雾消散）</li>
-                        <li><strong>蛇头拖尾</strong> ✨ - Particle_Trail_00（持续跟随，速度越快粒子越多）</li>
+                        <li><strong>吃球特效</strong> - Particle_Stars_00（星星爆炸）</li>
+                        <li><strong>洗牌特效</strong> - Particle_Card_00（卡牌飞舞）</li>
+                        <li><strong>胜利特效</strong> - Particle_Firework_00（烟花庆祝）</li>
+                        <li><strong>失败特效</strong> - Particle_Smoke_00（烟雾消散）</li>
+                        <li><strong>蛇头拖尾</strong> - Particle_Trail_00（持续跟随，速度越快粒子越多）</li>
                     </ul>
                 </div>
             </section>
             
             <section id="architecture" class="section">
-                <h2 class="section-title">🏗️ 系统架构</h2>
+                <h2 class="section-title">系统架构</h2>
                 
                 <div class="card">
                     <div class="card-title">项目结构</div>
@@ -545,7 +521,7 @@ float speedMultiplier = Mathf.Lerp(
             </section>
             
             <section id="algorithms" class="section">
-                <h2 class="section-title">💡 核心算法</h2>
+                <h2 class="section-title">核心算法</h2>
                 
                 <div class="card">
                     <div class="card-title">1. 屏幕穿越算法</div>
@@ -590,7 +566,7 @@ public bool IsCellOccupied(Vector2Int gridPos)
             </section>
             
             <section id="optimization" class="section">
-                <h2 class="section-title">⚡ 性能优化</h2>
+                <h2 class="section-title">性能优化</h2>
                 
                 <ul>
                     <li><strong>HashSet 数据结构</strong> - O(1)复杂度的碰撞检测</li>
@@ -602,9 +578,9 @@ public bool IsCellOccupied(Vector2Int gridPos)
             </section>
             
             <section id="setup" class="section">
-                <h2 class="section-title">🚀 项目设置</h2>
+                <h2 class="section-title">项目设置</h2>
                 
-                <div class="info">
+                <div class="info-box">
                     <strong>系统要求</strong><br>
                     Unity 2021.3 LTS 或更高版本<br>
                     TextMeshPro 包<br>
@@ -654,14 +630,14 @@ public bool IsCellOccupied(Vector2Int gridPos)
                         <tr>
                             <td>VFXManager</td>
                             <td>Enable Snake Head VFX</td>
-                            <td>✓ 勾选</td>
+                            <td>是</td>
                         </tr>
                     </tbody>
                 </table>
             </section>
             
             <section id="scripts" class="section">
-                <h2 class="section-title">📜 脚本文档</h2>
+                <h2 class="section-title">脚本文档</h2>
                 
                 <div class="card">
                     <div class="card-title">核心脚本列表</div>
@@ -676,22 +652,22 @@ public bool IsCellOccupied(Vector2Int gridPos)
                     </ul>
                 </div>
                 
-                <div class="success">
+                <div class="info-box">
                     <strong>Google Style 注释规范</strong><br>
                     所有脚本都遵循 Google C# Style Guide，包含详细的类说明、方法注释、参数说明和返回值文档。
                 </div>
             </section>
             
             <section id="troubleshooting" class="section">
-                <h2 class="section-title">🐛 问题排查</h2>
+                <h2 class="section-title">问题排查</h2>
                 
-                <div class="warning">
+                <div class="info-box">
                     <strong>特效不显示？</strong><br>
                     设置粒子预制体的 <code>Order in Layer = 999</code><br>
                     详见：<code>VFX_QuickFix.md</code>
                 </div>
                 
-                <div class="warning">
+                <div class="info-box">
                     <strong>扑克牌显示白牌？</strong><br>
                     确保PNG导入设置为 <code>Sprite (2D and UI)</code><br>
                     详见：<code>Phase5_PokerCard_Visual_Fix.md</code>
@@ -708,7 +684,7 @@ public bool IsCellOccupied(Vector2Int gridPos)
             </section>
             
             <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted);">
-                <p>Built with ❤️ by NewbieAudioKid</p>
+                <p>Built by NewbieAudioKid</p>
                 <p>Poker Card Snake Game © 2026</p>
             </footer>
         </main>

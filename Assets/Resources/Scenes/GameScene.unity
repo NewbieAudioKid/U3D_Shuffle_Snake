@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 17055073}
-  prefix: 'Score: '
+  prefix: 
   suffix: 
 --- !u!1 &99431876
 GameObject:
@@ -3061,6 +3061,7 @@ Transform:
   - {fileID: 1583954809324881187}
   - {fileID: 4492821851020249718}
   - {fileID: 8008059619929370781}
+  - {fileID: 1397270087}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3689,6 +3690,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1392024969}
   m_CullTransparentMesh: 1
+--- !u!1 &1397270086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1397270087}
+  - component: {fileID: 1397270088}
+  m_Layer: 0
+  m_Name: VFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1397270087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397270086}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1253176507}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1397270088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397270086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b512d048a8f14928b0093f04bf5d536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectBallVFX: {fileID: 9094464860163139865, guid: dea0d8de0a89f421ca323e9a3ca797e9, type: 3}
+  shuffleCardsVFX: {fileID: 3883004126413938183, guid: d7fe14d8082b14f1c891cd211cd14863, type: 3}
+  victoryVFX: {fileID: 4407320243532393352, guid: 52d1380e7746c4784bb838b057a1586f, type: 3}
+  gameOverVFX: {fileID: 5663393607302460044, guid: df82ba38001c04f37a0af35f7e45ff04, type: 3}
+  snakeHeadTrailVFX: {fileID: 1765545165444144551, guid: 586fbfa5d7aae4d90b9d987fa94eee52, type: 3}
+  vfxLifetime: 2
+  useObjectPooling: 1
+  enableSnakeHeadVFX: 1
+  minTrailEmission: 10
+  maxTrailEmission: 50
 --- !u!1 &1399268660
 GameObject:
   m_ObjectHideFlags: 0
@@ -4061,7 +4116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   windowContainer: {fileID: 809519250}
   titleText: {fileID: 270711878}
-  scoreText: {fileID: 0}
+  scoreText: {fileID: 1865251956}
   btnRetry: {fileID: 1399268660}
   btnMenu: {fileID: 1387057585}
   btnNext: {fileID: 1662223680}
@@ -4706,6 +4761,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1787989029}
   m_CullTransparentMesh: 1
+--- !u!1 &1807120761
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1807120763}
+  - component: {fileID: 1807120762}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1807120762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807120761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2942b8d7bb0a94c1da79274819faf430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentScore: 0
+  highScore: 0
+  gameTime: 30
+  remainingTime: 30
+  isGameRunning: 0
+--- !u!4 &1807120763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807120761}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 102.21529, y: 50.627323, z: -0.65275407}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1847217619
 GameObject:
   m_ObjectHideFlags: 0
@@ -5024,6 +5128,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokerZoneHeightRatio: 0.2
   minDragDistance: 20
+  minSpeedMultiplier: 1
+  maxSpeedMultiplier: 3
+  maxDragDistanceForSpeed: 200
   showDebugInfo: 1
 --- !u!4 &1893178039
 Transform:
@@ -5346,6 +5453,56 @@ MonoBehaviour:
   cardXOffset: 0
   cardYOffset: 0
   comboTextDisplayTime: 0.5
+  popInCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  popOutCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  popInDuration: 0.3
+  popOutDuration: 0.2
   shuffleCooldown: 0.1
 --- !u!4 &2106092448
 Transform:
